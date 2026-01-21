@@ -42,6 +42,9 @@ const ContractSchema = new mongoose.Schema(
         },
         payments: [
             {
+                week: {
+                    type: Number,
+                },
                 amount: {
                     type: Number,
                 },
