@@ -6,6 +6,57 @@ const ContractSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        owner: {
+            firstname: {
+                type: Number,
+            },
+            othername: {
+                type: Number,
+            },
+            lastname: {
+                type: String,
+            },
+            phone: {
+                type: String,
+            },
+        },
+        driver: {
+            firstname: {
+                type: String,
+            },
+            othername: {
+                type: String,
+            },
+            lastname: {
+                type: String,
+            },
+            phone: {
+                type: String,
+            },
+            location: {
+                type: String,
+            },
+            national:{
+                type: String,
+            }
+        },
+        guarantor: {
+            firstname: {
+                type: String,
+            },
+            othername: {
+                type: String,
+            },
+            lastname: {
+                type: String,
+            },
+            phone: {
+                type: String,
+            },
+            national: {
+                type: String,
+            },
+        },
         vehicle: {
             type: String,
             enum: ["motorcycle", "tricycle"],
@@ -16,23 +67,14 @@ const ContractSchema = new mongoose.Schema(
         license: {
             type: String,
         },
-        firstname: {
-            type: String,
-        },
-        othername: {
-            type: String,
-        },
-        lastname: {
-            type: String,
-        },
-        phone: {
-            type: String,
-        },
-        location: {
-            type: String,
-        },
         deposit: {
             type: Number,
+        },
+        start: {
+            type: Date,
+        },
+        end: {
+            type: Date,
         },
         duration: {
             type: Number,
@@ -61,6 +103,10 @@ const ContractSchema = new mongoose.Schema(
                 },
             }
         ],
+        status: {
+            type: String,
+            enum: ["active", "default", "completed"],
+        },
         createdAt: {
             type: Date,
             default: Date.now,
