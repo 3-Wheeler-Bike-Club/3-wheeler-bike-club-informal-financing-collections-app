@@ -20,6 +20,27 @@ const ContractSchema = new mongoose.Schema(
                 type: String,
             },
         },
+        vehicle: {
+            type: {
+                type: String,
+                enum: ["motorcycle", "tricycle"],
+            },
+            model: {
+                type: String,
+            },
+            year: {
+                type: String,
+            },
+            color: {
+                type: String,
+            },
+            vin: {
+                type: String,
+            },
+            license: {
+                type: String,
+            },
+        },
         driver: {
             firstname: {
                 type: String,
@@ -57,16 +78,6 @@ const ContractSchema = new mongoose.Schema(
                 type: String,
             },
         },
-        vehicle: {
-            type: String,
-            enum: ["motorcycle", "tricycle"],
-        },
-        vin: {
-            type: String,
-        },
-        license: {
-            type: String,
-        },
         deposit: {
             type: Number,
         },
@@ -80,6 +91,9 @@ const ContractSchema = new mongoose.Schema(
             type: Number,
         },
         amount: {
+            type: Number,
+        },
+        installment: {
             type: Number,
         },
         payments: [
@@ -105,7 +119,7 @@ const ContractSchema = new mongoose.Schema(
         ],
         status: {
             type: String,
-            enum: ["active", "default", "completed"],
+            enum: ["pending", "active", "defaulted", "completed"],
         },
         createdAt: {
             type: Date,

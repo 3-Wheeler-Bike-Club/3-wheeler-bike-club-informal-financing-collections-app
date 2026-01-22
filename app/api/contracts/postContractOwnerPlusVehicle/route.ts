@@ -10,22 +10,14 @@ export async function POST(
         return authResponse
     }
 
-    const { id, owner, driver, vehicle, vin, license, deposit, start, end, duration, amount, status } = await req.json()
+    const { id, owner, vehicle, status } = await req.json()
 
     try {
         await connectDB()
         const contract = await Contract.create({ 
             id: id,
             owner: owner,
-            driver: driver,
             vehicle: vehicle,
-            vin: vin,
-            license: license,
-            deposit: deposit,
-            start: start,
-            end: end,
-            duration: duration,
-            amount: amount,
             status: status,
         })
         return new Response(JSON.stringify(contract))

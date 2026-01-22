@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "@/context/providers";
 import { Toaster } from "@/components/ui/sonner";
-import { Menu } from "@/components/top/menu";
 import { Footer } from "@/components/bottom/footer";
 
 const geistMono = Geist_Mono({
