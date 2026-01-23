@@ -13,8 +13,10 @@ export function Wrapper() {
             description: "Complete vehicle inventory management system",
             icon: Package,
             href: "/inventory",
-            color: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800",
-            hoverColor: "hover:bg-blue-500/20 hover:border-blue-300 dark:hover:border-blue-700",
+            iconBg: "bg-chart-1/10",
+            iconColor: "text-chart-1",
+            borderColor: "border-chart-1/30",
+            hoverColor: "hover:bg-chart-1/5 hover:border-chart-1/50",
             features: [
                 "View all vehicles",
                 "Add new inventory",
@@ -27,8 +29,10 @@ export function Wrapper() {
             description: "Comprehensive sales tracking and management",
             icon: ShoppingCart,
             href: "/sales",
-            color: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-200 dark:border-green-800",
-            hoverColor: "hover:bg-green-500/20 hover:border-green-300 dark:hover:border-green-700",
+            iconBg: "bg-chart-2/10",
+            iconColor: "text-chart-2",
+            borderColor: "border-chart-2/30",
+            hoverColor: "hover:bg-chart-2/5 hover:border-chart-2/50",
             features: [
                 "Record sales transactions",
                 "View sales history",
@@ -41,8 +45,10 @@ export function Wrapper() {
             description: "Payment collections and contract management",
             icon: FileText,
             href: "/contracts",
-            color: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-800",
-            hoverColor: "hover:bg-purple-500/20 hover:border-purple-300 dark:hover:border-purple-700",
+            iconBg: "bg-chart-3/10",
+            iconColor: "text-chart-3",
+            borderColor: "border-chart-3/30",
+            hoverColor: "hover:bg-chart-3/5 hover:border-chart-3/50",
             features: [
                 "Create contracts",
                 "Track payments",
@@ -63,7 +69,7 @@ export function Wrapper() {
                             <Alert>
                                 <DoorOpen className="h-4 w-4" />
                                 <AlertTitle className="font-bold">
-                                    Welcome, <span className="text-yellow-600">Mustapha Enterprise</span>
+                                    Welcome, <span className="text-primary">Mustapha Enterprise</span>
                                 </AlertTitle>
                                 <AlertDescription className="text-xs italic">
                                     <p className="max-md:text-[11px]">{"Select an option from the menu to get started"}</p>
@@ -87,7 +93,8 @@ export function Wrapper() {
                                                 relative w-full min-h-[320px] md:h-full p-6 md:p-8 rounded-xl border-2 
                                                 transition-all duration-300 cursor-pointer
                                                 bg-card text-card-foreground
-                                                ${item.color} ${item.hoverColor}
+                                                border-border
+                                                ${item.borderColor} ${item.hoverColor}
                                                 shadow-md
                                                 hover:shadow-xl hover:scale-105 hover:-mt-2
                                                 flex flex-col
@@ -95,7 +102,7 @@ export function Wrapper() {
                                                 <div className="flex flex-col items-center text-center mb-6">
                                                     <div className={`
                                                         p-3 md:p-4 rounded-xl mb-4
-                                                        ${item.color.split(' ')[0]} 
+                                                        ${item.iconBg} ${item.iconColor}
                                                         group-hover:scale-110 transition-transform duration-300
                                                     `}>
                                                         <Icon className="h-8 w-8 md:h-10 md:w-10" />
@@ -111,10 +118,10 @@ export function Wrapper() {
                                                 <div className="flex-1 flex flex-col justify-between">
                                                     <ul className="space-y-3 mb-6">
                                                         {item.features.map((feature, idx) => (
-                                                            <li key={idx} className="flex items-start gap-3">
-                                                                <Check className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
-                                                                <span className="text-sm text-muted-foreground">{feature}</span>
-                                                            </li>
+                                                        <li key={idx} className="flex items-start gap-3">
+                                                            <Check className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                                                            <span className="text-sm text-muted-foreground">{feature}</span>
+                                                        </li>
                                                         ))}
                                                     </ul>
 
