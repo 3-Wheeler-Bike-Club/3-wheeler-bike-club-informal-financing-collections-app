@@ -6,6 +6,10 @@ const ContractSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        branch: {
+            type: String,
+            enum: ["kasoa", "kumasi"],
+        },
         owner: {
             firstname: {
                 type: Number,
