@@ -12,7 +12,7 @@ export function Wrapper() {
             title: "Inventory",
             description: "Complete vehicle inventory management system",
             icon: Package,
-            href: "/dashboard/inventory",
+            href: "/inventory",
             color: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800",
             hoverColor: "hover:bg-blue-500/20 hover:border-blue-300 dark:hover:border-blue-700",
             features: [
@@ -26,7 +26,7 @@ export function Wrapper() {
             title: "Sales",
             description: "Comprehensive sales tracking and management",
             icon: ShoppingCart,
-            href: "/dashboard/sales",
+            href: "/sales",
             color: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-200 dark:border-green-800",
             hoverColor: "hover:bg-green-500/20 hover:border-green-300 dark:hover:border-green-700",
             features: [
@@ -40,7 +40,7 @@ export function Wrapper() {
             title: "Work & Pay",
             description: "Payment collections and contract management",
             icon: FileText,
-            href: "/dashboard/contracts",
+            href: "/contracts",
             color: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-800",
             hoverColor: "hover:bg-purple-500/20 hover:border-purple-300 dark:hover:border-purple-700",
             features: [
