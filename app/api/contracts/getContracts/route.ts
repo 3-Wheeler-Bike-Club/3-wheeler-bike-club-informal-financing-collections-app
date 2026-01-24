@@ -34,7 +34,7 @@ export async function POST(
     } catch (error) {
         return new Response(
             JSON.stringify({
-                error: "Failed to fetch liquidity providers",
+                error: "Failed to fetch contracts",
                 details: error
             }),
             { status: 500 }
