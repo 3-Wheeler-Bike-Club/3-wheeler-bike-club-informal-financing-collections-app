@@ -4,19 +4,18 @@ import { useState, useEffect } from "react"
 export interface Contract {
     _id: string
     branch: "kasoa" | "kumasi"
+    vehicle: {
+        type: "motorcycle" | "tricycle"
+        model: string
+        color: string
+        vin: string
+        license: string
+    }
     owner: {
         firstname: number
         othername: number
         lastname: string
         phone: string
-    }
-    vehicle: {
-        type: "motorcycle" | "tricycle"
-        model: string
-        year: string
-        color: string
-        vin: string
-        license: string
     }
     driver?: {
         firstname: string

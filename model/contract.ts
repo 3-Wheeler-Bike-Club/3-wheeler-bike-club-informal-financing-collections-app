@@ -6,6 +6,24 @@ const ContractSchema = new mongoose.Schema(
             type: String,
             enum: ["kasoa", "kumasi"],
         },
+        vehicle: {
+            type: {
+                type: String,
+                enum: ["motorcycle", "tricycle"],
+            },
+            model: {
+                type: String,
+            },
+            color: {
+                type: String,
+            },
+            vin: {
+                type: String,
+            },
+            license: {
+                type: String,
+            },
+        },
         owner: {
             firstname: {
                 type: Number,
@@ -17,27 +35,6 @@ const ContractSchema = new mongoose.Schema(
                 type: String,
             },
             phone: {
-                type: String,
-            },
-        },
-        vehicle: {
-            type: {
-                type: String,
-                enum: ["motorcycle", "tricycle"],
-            },
-            model: {
-                type: String,
-            },
-            year: {
-                type: String,
-            },
-            color: {
-                type: String,
-            },
-            vin: {
-                type: String,
-            },
-            license: {
                 type: String,
             },
         },
