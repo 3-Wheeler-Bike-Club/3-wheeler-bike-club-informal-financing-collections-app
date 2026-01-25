@@ -6,6 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription, EmptyContent } from "@/components/ui/empty";
 import { useGetSales } from "@/hooks/useGetSales";
+import { AddSale } from "./addSale";
 
 export function Wrapper() {
 
@@ -58,10 +59,7 @@ export function Wrapper() {
                                         </EmptyDescription>
                                     </EmptyHeader>
                                     <EmptyContent>
-                                        <Button variant="outline">
-                                            <Plus />
-                                            Add Sales
-                                        </Button>
+                                        <AddSale />
                                     </EmptyContent>
                                 </Empty>
                             </>
