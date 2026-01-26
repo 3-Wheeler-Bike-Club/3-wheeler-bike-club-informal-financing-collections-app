@@ -121,7 +121,10 @@ export function AddSale({ inventory }: AddSaleProps) {
                           <Field data-invalid={isInvalid}>
                             <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
                             <FieldLabel htmlFor={field.name} className="text-primary">Branch</FieldLabel>
-                                <Select>
+                                <Select
+                                  value={field.state.value}
+                                  onValueChange={(value) => field.handleChange(value)}
+                                >
                                   <SelectTrigger className="w-full">
                                   <SelectValue placeholder="Select a branch" />
                                   </SelectTrigger>
@@ -149,22 +152,26 @@ export function AddSale({ inventory }: AddSaleProps) {
                           <Field data-invalid={isInvalid}>
                             <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
                             <FieldLabel htmlFor={field.name} className="text-primary">Type</FieldLabel>
-                            <RadioGroup className="max-w-full">
-                              <FieldLabel htmlFor="plus-plan">
+                            <RadioGroup 
+                              className="max-w-full"
+                              value={field.state.value}
+                              onValueChange={(value) => field.handleChange(value)}
+                            >
+                              <FieldLabel htmlFor="motorcycle">
                                 <Field orientation="horizontal">
                                   <FieldContent>
                                     <FieldTitle> <Motorbike className="h-4 w-4 text-primary" /> Motorcycle </FieldTitle>
                                   </FieldContent>
-                                  <RadioGroupItem value="plus" id="plus-plan" />
+                                  <RadioGroupItem value="motorcycle" id="motorcycle" />
                                 </Field>
                               </FieldLabel>
-                              <FieldLabel htmlFor="pro-plan">
+                              <FieldLabel htmlFor="tricycle">
                                 <Field orientation="horizontal">
                                   <FieldContent>
                                     <FieldTitle> <Caravan className="h-4 w-4 text-primary" /> Tricycle </FieldTitle>
                                       
                                   </FieldContent>
-                                  <RadioGroupItem value="pro" id="pro-plan" />
+                                  <RadioGroupItem value="tricycle" id="tricycle" />
                                 </Field>
                               </FieldLabel>
                             </RadioGroup>
@@ -188,6 +195,16 @@ export function AddSale({ inventory }: AddSaleProps) {
                             <Combobox
                               items={inventory!.filter((inventory) => inventory.vehicle.vin !== "")}
                               itemToStringValue={(inventory: Inventory) => inventory.vehicle.vin}
+                              value={
+                                inventory!.find((inv) => inv.vehicle.vin === field.state.value) || null
+                              }
+                              onValueChange={(selectedInventory: Inventory | null) => {
+                                if (selectedInventory) {
+                                  field.handleChange(selectedInventory.vehicle.vin)
+                                } else {
+                                  field.handleChange("")
+                                }
+                              }}
                             >
                               <ComboboxInput placeholder="Search vehicles..." />
                               <ComboboxContent>
@@ -232,10 +249,15 @@ export function AddSale({ inventory }: AddSaleProps) {
                                   name={field.name}
                                   value={field.state.value}
                                   onBlur={field.handleBlur}
-                                  onChange={(e) => field.handleChange(e.target.value)}
+                                  onChange={(e) => {
+                                    // Convert to uppercase
+                                    const uppercaseValue = e.target.value.toUpperCase()
+                                    field.handleChange(uppercaseValue)
+                                  }}
                                   aria-invalid={isInvalid}
                                   placeholder="John"
                                   autoComplete="off"
+                                  style={{ textTransform: 'uppercase' }}
                                 />
                                 {isInvalid && (
                                   <FieldError errors={field.state.meta.errors} />
@@ -259,10 +281,15 @@ export function AddSale({ inventory }: AddSaleProps) {
                                   name={field.name}
                                   value={field.state.value}
                                   onBlur={field.handleBlur}
-                                  onChange={(e) => field.handleChange(e.target.value)}
+                                  onChange={(e) => {
+                                    // Convert to uppercase
+                                    const uppercaseValue = e.target.value.toUpperCase()
+                                    field.handleChange(uppercaseValue)
+                                  }}
                                   aria-invalid={isInvalid}
                                   placeholder="Doe"
                                   autoComplete="off"
+                                  style={{ textTransform: 'uppercase' }}
                                 />
                                 {isInvalid && (
                                   <FieldError errors={field.state.meta.errors} />
@@ -286,10 +313,15 @@ export function AddSale({ inventory }: AddSaleProps) {
                                   name={field.name}
                                   value={field.state.value}
                                   onBlur={field.handleBlur}
-                                  onChange={(e) => field.handleChange(e.target.value)}
+                                  onChange={(e) => {
+                                    // Convert to uppercase
+                                    const uppercaseValue = e.target.value.toUpperCase()
+                                    field.handleChange(uppercaseValue)
+                                  }}
                                   aria-invalid={isInvalid}
                                   placeholder="Smith"
                                   autoComplete="off"
+                                  style={{ textTransform: 'uppercase' }}
                                 />
                                 {isInvalid && (
                                   <FieldError errors={field.state.meta.errors} />

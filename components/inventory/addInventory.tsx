@@ -27,7 +27,6 @@ import {
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { FileUploader, FileUploaderContent, FileUploaderItem, FileInput } from "@/components/ui/file-upload"
-import { useState } from "react"
 import { shortenTxt } from "@/utils/shorten"
 
 // Helper function to format number with commas
@@ -51,14 +50,13 @@ const addInventoryFormSchema = z.object({
   vehicleVin: z
     .string(),
   vehiclePapers: z
-    .string(),
+    .array(z.instanceof(File))
+    .nullable(),
   amount: z
     .string(),
 })
 
 export function AddInventory() {
-
-  const [papers, setPapers] = useState <File[] | null> (null);
 
   const addInventoryForm = useForm({
     defaultValues: {
@@ -67,7 +65,7 @@ export function AddInventory() {
       vehicleModel: "",
       vehicleColor: "",
       vehicleVin: "",
-      vehiclePapers: "",
+      vehiclePapers: null as File[] | null,
       amount: "",
 
     },
@@ -75,20 +73,7 @@ export function AddInventory() {
       onSubmit: addInventoryFormSchema,
     },
     onSubmit: async ({ value }) => {
-      toast("You submitted the following values:", {
-        description: (
-          <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-            <code>{JSON.stringify(value, null, 2)}</code>
-          </pre>
-        ),
-        position: "bottom-right",
-        classNames: {
-          content: "flex flex-col gap-2",
-        },
-        style: {
-          "--border-radius": "calc(var(--radius)  + 4px)",
-        } as React.CSSProperties,
-      })
+      console.log(value)
     },
   })
 
@@ -127,7 +112,10 @@ export function AddInventory() {
                           <Field data-invalid={isInvalid}>
                             <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
                             <FieldLabel htmlFor={field.name} className="text-primary">Branch</FieldLabel>
-                                <Select>
+                                <Select
+                                  value={field.state.value}
+                                  onValueChange={(value) => field.handleChange(value)}
+                                >
                                   <SelectTrigger className="w-full">
                                   <SelectValue placeholder="Select a branch" />
                                   </SelectTrigger>
@@ -155,21 +143,25 @@ export function AddInventory() {
                           <Field data-invalid={isInvalid}>
                             <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
                             <FieldLabel htmlFor={field.name} className="text-primary">Type</FieldLabel>
-                            <RadioGroup className="max-w-full">
-                              <FieldLabel htmlFor="plus-plan">
+                            <RadioGroup 
+                              className="max-w-full"
+                              value={field.state.value}
+                              onValueChange={(value) => field.handleChange(value)}
+                            >
+                              <FieldLabel htmlFor="motorcycle">
                                 <Field orientation="horizontal">
                                   <FieldContent>
                                     <FieldTitle> <Motorbike className="h-4 w-4 text-primary" /> Motorcycle</FieldTitle>
                                   </FieldContent>
-                                  <RadioGroupItem value="plus" id="plus-plan" />
+                                  <RadioGroupItem value="motorcycle" id="motorcycle" />
                                 </Field>
                               </FieldLabel>
-                              <FieldLabel htmlFor="pro-plan">
+                              <FieldLabel htmlFor="tricycle">
                                 <Field orientation="horizontal">
                                   <FieldContent>
                                     <FieldTitle> <Caravan className="h-4 w-4 text-primary" /> Tricycle</FieldTitle>
                                   </FieldContent>
-                                  <RadioGroupItem value="pro" id="pro-plan" />
+                                  <RadioGroupItem value="tricycle" id="tricycle" />
                                 </Field>
                               </FieldLabel>
                             </RadioGroup>
@@ -190,7 +182,10 @@ export function AddInventory() {
                           <Field data-invalid={isInvalid}>
                             <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
                             <FieldLabel htmlFor={field.name} className="text-primary">Model</FieldLabel>
-                            <Select>
+                            <Select
+                              value={field.state.value}
+                              onValueChange={(value) => field.handleChange(value)}
+                            >
                               <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Select a vehicle model" />
                               </SelectTrigger>
@@ -224,7 +219,10 @@ export function AddInventory() {
                           <Field data-invalid={isInvalid}>
                             <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
                             <FieldLabel htmlFor={field.name} className="text-primary">Color</FieldLabel>
-                                <Select>
+                                <Select
+                                  value={field.state.value}
+                                  onValueChange={(value) => field.handleChange(value)}
+                                >
                                   <SelectTrigger className="w-full">
                                   <SelectValue placeholder="Select a color" />
                                   </SelectTrigger>
@@ -262,10 +260,15 @@ export function AddInventory() {
                                   name={field.name}
                                   value={field.state.value}
                                   onBlur={field.handleBlur}
-                                  onChange={(e) => field.handleChange(e.target.value)}
+                                  onChange={(e) => {
+                                    // Convert to uppercase and only allow alphanumeric characters
+                                    const uppercaseValue = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '')
+                                    field.handleChange(uppercaseValue)
+                                  }}
                                   aria-invalid={isInvalid}
                                   placeholder="MD6M14PA2R4NO1944"
                                   autoComplete="off"
+                                  style={{ textTransform: 'uppercase' }}
                                 />
                                 {isInvalid && (
                                   <FieldError errors={field.state.meta.errors} />
@@ -285,8 +288,8 @@ export function AddInventory() {
                             <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
                             <FieldLabel htmlFor={field.name} className="text-primary">Papers</FieldLabel>
                                 <FileUploader
-                                    value={papers}
-                                    onValueChange={setPapers}
+                                    value={field.state.value || null}
+                                    onValueChange={(files) => field.handleChange(files)}
                                     dropzoneOptions={{
                                         maxFiles: 4,
                                         maxSize: 1024 * 1024 * 4,
@@ -313,9 +316,9 @@ export function AddInventory() {
                                         </div>
                                     </FileInput>
                                     <FileUploaderContent>
-                                        {papers &&
-                                            papers.length > 0 &&
-                                            papers.map((file, i) => (
+                                        {field.state.value &&
+                                            field.state.value.length > 0 &&
+                                            field.state.value.map((file, i) => (
                                                 <FileUploaderItem key={i} index={i}>
                                                     <Paperclip className="h-4 w-4 stroke-current" />
                                                     <span>{shortenTxt(file.name)}</span>
@@ -339,7 +342,7 @@ export function AddInventory() {
                         return (
                           <Field data-invalid={isInvalid}>
                             <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Amount</FieldLabel>
+                            <FieldLabel htmlFor={field.name} className="text-primary">Amount(GHS)</FieldLabel>
                                 <Input
                                   id={field.name}
                                   name={field.name}
