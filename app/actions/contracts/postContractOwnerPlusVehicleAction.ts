@@ -2,8 +2,20 @@
 
 export async function postContractOwnerPlusVehicleAction(
     branch: string,
-    owner: string,
-    vehicle: string,
+    vehicle: {
+        type: "motorcycle" | "tricycle"
+        model: string
+        color: string
+        vin: string
+        license: string
+    },
+    owner: {
+        firstname: string
+        othername: string
+        lastname: string
+        phone: string
+    },
+    
 ) {
     try {
         const response = await fetch(`${process.env.BASE_URL}/api/contracts/postContractOwnerPlusVehicle`, {
@@ -14,8 +26,8 @@ export async function postContractOwnerPlusVehicleAction(
             },
             body: JSON.stringify({ 
                 branch: branch,
-                owner: owner,
                 vehicle: vehicle,
+                owner: owner,
             })
         })
         if (!response.ok) {

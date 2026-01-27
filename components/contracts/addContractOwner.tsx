@@ -23,34 +23,53 @@ import {
   FieldDescription,
 } from "@/components/ui/field"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Caravan, Motorbike, Plus } from "lucide-react"
+import { Caravan, CirclePile, Loader2, Motorbike, Plus } from "lucide-react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { PhoneInput } from "../ui/phone-input"
+import { useState } from "react"
+import { toast } from "sonner"
+import { postContractOwnerPlusVehicleAction } from "@/app/actions/contracts/postContractOwnerPlusVehicleAction"
 
 const addContractOwnerFormSchema = z.object({
   branch: z
-    .string(),
+    .string()
+    .min(1, "Branch is required"),
   vehicleType: z
-    .string(),
+  .string()
+  .min(1, "Vehicle type is required"),
   vehicleModel: z
-    .string(),
+    .string()
+    .min(1, "Vehicle model is required"),
   vehicleColor: z
-    .string(),
+    .string()
+    .min(1, "Vehicle color is required"),
   vehicleVin: z
-    .string(),
+    .string()
+    .min(1, "VIN is required"),
   vehicleLicense: z
-    .string(),
+    .string()
+    .min(1, "License is required"),
   ownerFirstName: z
-    .string(),
+    .string()
+    .min(1, "First name is required"),
   ownerOtherName: z
     .string(),
   ownerLastName: z
-    .string(),
+    .string()
+    .min(1, "Last name is required"),
   ownerPhone: z
-    .string(),
+    .string()
+    .min(10, "Phone number must be at least 10 digits"),
 })
 
-export function AddContractOwner() {
+
+interface AddContractOwnerProps {
+  getContracts: () => void
+}
+
+export function AddContractOwner({ getContracts }: AddContractOwnerProps) {
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const addContractOwnerForm = useForm({
     defaultValues: {
@@ -70,7 +89,45 @@ export function AddContractOwner() {
       onSubmit: addContractOwnerFormSchema,
     },
     onSubmit: async ({ value }) => {
+      setIsSubmitting(true)
       console.log(value)
+      try {
+        const postContractOwnerPlusVehicle = await postContractOwnerPlusVehicleAction(
+          value.branch,
+          {
+            type: value.vehicleType as "motorcycle" | "tricycle",
+            model: value.vehicleModel,
+            color: value.vehicleColor,
+            vin: value.vehicleVin,
+            license: value.vehicleLicense,
+          },
+          {
+            firstname: value.ownerFirstName,
+            othername: value.ownerOtherName,
+            lastname: value.ownerLastName,
+            phone: value.ownerPhone,
+          },
+        )
+        if (postContractOwnerPlusVehicle) {
+          toast.success("Contract owner plus vehicle posted successfully", {
+            description: "You can now add another contract owner plus vehicle or close this dialog",
+          })
+          setIsSubmitting(false)
+          addContractOwnerForm.reset()
+          getContracts()
+        } else {
+          toast.error("Failed to post contract owner plus vehicle", {
+            description: "Something went wrong, please try again",
+          })
+          setIsSubmitting(false)
+        }
+      } catch (error) {
+        console.error("Form submission error", error);
+        toast.error("Failed to submit the form.", {
+          description: `Something went wrong, please try again`,
+        })
+        setIsSubmitting(false)
+      }
     },
   })
 
@@ -114,6 +171,7 @@ export function AddContractOwner() {
                                 <Select
                                   value={field.state.value}
                                   onValueChange={(value) => field.handleChange(value)}
+                                  disabled={isSubmitting}
                                 >
                                   <SelectTrigger className="w-full">
                                   <SelectValue placeholder="Select a branch" />
@@ -146,6 +204,7 @@ export function AddContractOwner() {
                               className="max-w-full"
                               value={field.state.value}
                               onValueChange={(value) => field.handleChange(value)}
+                              disabled={isSubmitting}
                             >
                               <FieldLabel htmlFor="motorcycle">
                                 <Field orientation="horizontal">
@@ -185,6 +244,7 @@ export function AddContractOwner() {
                             <Select
                               value={field.state.value}
                               onValueChange={(value) => field.handleChange(value)}
+                              disabled={isSubmitting}
                             >
                               <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Select a vehicle model" />
@@ -222,6 +282,7 @@ export function AddContractOwner() {
                                 <Select
                                   value={field.state.value}
                                   onValueChange={(value) => field.handleChange(value)}
+                                  disabled={isSubmitting}
                                 >
                                   <SelectTrigger className="w-full">
                                   <SelectValue placeholder="Select a color" />
@@ -269,6 +330,7 @@ export function AddContractOwner() {
                                   placeholder="MD6M14PA2R4NO1944"
                                   autoComplete="off"
                                   style={{ textTransform: 'uppercase' }}
+                                  disabled={isSubmitting}
                                 />
                                 {isInvalid && (
                                   <FieldError errors={field.state.meta.errors} />
@@ -301,6 +363,7 @@ export function AddContractOwner() {
                                   placeholder="GH-1234567890"
                                   autoComplete="off"
                                   style={{ textTransform: 'uppercase' }}
+                                  disabled={isSubmitting}
                                 />
                                 {isInvalid && (
                                   <FieldError errors={field.state.meta.errors} />
@@ -333,6 +396,7 @@ export function AddContractOwner() {
                                   placeholder="John"
                                   autoComplete="off"
                                   style={{ textTransform: 'uppercase' }}
+                                  disabled={isSubmitting}
                                 />
                                 {isInvalid && (
                                   <FieldError errors={field.state.meta.errors} />
@@ -365,6 +429,7 @@ export function AddContractOwner() {
                                   placeholder="Doe"
                                   autoComplete="off"
                                   style={{ textTransform: 'uppercase' }}
+                                  disabled={isSubmitting}
                                 />
                                 {isInvalid && (
                                   <FieldError errors={field.state.meta.errors} />
@@ -397,6 +462,7 @@ export function AddContractOwner() {
                                   placeholder="Smith"
                                   autoComplete="off"
                                   style={{ textTransform: 'uppercase' }}
+                                  disabled={isSubmitting}
                                 />
                                 {isInvalid && (
                                   <FieldError errors={field.state.meta.errors} />
@@ -424,6 +490,7 @@ export function AddContractOwner() {
                                     onBlur={field.handleBlur}
                                     onChange={(value) => field.handleChange(value)}
                                     aria-invalid={isInvalid}
+                                    disabled={isSubmitting}
                                   />
                                 {isInvalid && (
                                   <FieldError errors={field.state.meta.errors} />
@@ -437,10 +504,11 @@ export function AddContractOwner() {
                     
                   </FieldGroup>
                   <Field orientation="horizontal" className="flex justify-end gap-2 mt-12">
-                    <Button type="button" variant="outline" onClick={() => addContractOwnerForm.reset()}>
+                    <Button type="button" variant="outline" onClick={() => addContractOwnerForm.reset()} disabled={isSubmitting}>
                       Reset
                     </Button>
-                    <Button type="submit" form="add-sale-form">
+                    <Button type="submit" form="add-sale-form" disabled={isSubmitting}>
+                      {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <CirclePile className="h-4 w-4" />}
                       Submit
                     </Button>
                   </Field>

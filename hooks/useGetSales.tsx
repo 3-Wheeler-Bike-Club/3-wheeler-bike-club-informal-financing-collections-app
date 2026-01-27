@@ -12,8 +12,8 @@ export interface Sale {
         papers: string[]
     }
     customer: {
-        firstname: number
-        othername: number
+        firstname: string
+        othername: string
         lastname: string
         phone: string
     }

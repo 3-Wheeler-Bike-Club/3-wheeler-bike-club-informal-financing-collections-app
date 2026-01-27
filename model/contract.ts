@@ -26,10 +26,10 @@ const ContractSchema = new mongoose.Schema(
         },
         owner: {
             firstname: {
-                type: Number,
+                type: String,
             },
             othername: {
-                type: Number,
+                type: String,
             },
             lastname: {
                 type: String,

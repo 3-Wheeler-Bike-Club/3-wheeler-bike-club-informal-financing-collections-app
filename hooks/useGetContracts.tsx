@@ -12,8 +12,8 @@ export interface Contract {
         license: string
     }
     owner: {
-        firstname: number
-        othername: number
+        firstname: string
+        othername: string
         lastname: string
         phone: string
     }

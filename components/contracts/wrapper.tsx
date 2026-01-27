@@ -3,10 +3,11 @@
 import { FileText, Plus, TriangleAlert } from "lucide-react";
 import { Menu } from "@/components/top/menu";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription, EmptyContent } from "@/components/ui/empty";
 import { useGetContracts } from "@/hooks/useGetContracts";
 import { AddContractOwner } from "./addContractOwner";
+import { DataTable } from "./dataTable";
+import { columns } from "./columns";
 
 export function Wrapper() {
 
@@ -58,7 +59,7 @@ export function Wrapper() {
                                             </EmptyDescription>
                                         </EmptyHeader>
                                         <EmptyContent>
-                                            <AddContractOwner />
+                                            <AddContractOwner getContracts={getBackContracts} />
                                         </EmptyContent>
                                     </Empty>
                                 </>
@@ -67,6 +68,12 @@ export function Wrapper() {
                         {
                             contracts && contracts.length >= 1 && (
                                 <>
+                                    <div className="flex flex-col w-full gap-4">
+                                        <div className="flex justify-end">
+                                            <AddContractOwner getContracts={getBackContracts} />
+                                        </div>
+                                        <DataTable columns={columns} data={contracts} />
+                                    </div>
                                 </>
                             )
                         }

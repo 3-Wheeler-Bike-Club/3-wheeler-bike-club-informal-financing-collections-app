@@ -16,8 +16,8 @@ export async function POST(
         await connectDB()
         const contract = await Contract.create({ 
             branch: branch,
-            owner: owner,
             vehicle: vehicle,
+            owner: owner,
             status: "pending",
         })
         return new Response(JSON.stringify(contract))
