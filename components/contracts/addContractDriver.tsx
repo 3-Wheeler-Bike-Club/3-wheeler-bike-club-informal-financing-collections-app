@@ -22,11 +22,11 @@ import {
   FieldTitle,
   FieldDescription,
 } from "@/components/ui/field"
-import { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useForm } from "@tanstack/react-form"
 import { toast } from "sonner"
 import { useUploadThing } from "@/hooks/useUploadThing"
-import { CirclePile, Loader2 } from "lucide-react"
+import { CirclePile, Loader2, ChevronLeft, ChevronRight } from "lucide-react"
 import { FileUploader, FileUploaderContent, FileUploaderItem, FileInput
 
  } from "@/components/ui/file-upload"
@@ -110,6 +110,14 @@ interface AddContractDriverProps {
 export function AddContractDriver({ open, onOpenChange, contract }: AddContractDriverProps) {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [ step, setStep ] = useState(1)
+
+  // Reset to step 1 when dialog opens
+  useEffect(() => {
+    if (open) {
+      setStep(1)
+    }
+  }, [open])
 
   const { startUpload: startUploadHeadshot, routeConfig: routeConfigHeadshot } = useUploadThing("headshotUploader", {
     onClientUploadComplete: () => {
@@ -194,8 +202,9 @@ export function AddContractDriver({ open, onOpenChange, contract }: AddContractD
             <DialogHeader>
               <DialogTitle>Assign Driver</DialogTitle>
               <DialogDescription>
-                Make changes to your profile here. Click save when you&apos;re
-                done.
+                {step === 1 && "Step 1: Driver Information"}
+                {step === 2 && "Step 2: Guarantor Information"}
+                {step === 3 && "Step 3: Contract Details"}
               </DialogDescription>
             </DialogHeader>
             <div className="flex flex-col p-4 no-scrollbar -mx-4 max-h-[50vh] overflow-y-auto">
@@ -208,751 +217,824 @@ export function AddContractDriver({ open, onOpenChange, contract }: AddContractD
                   }}
                 >
                   <FieldGroup>
-                    <addContractDriverForm.Field
-                      name="driverFirstName"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">First Name</FieldLabel>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  value={field.state.value}
-                                  onBlur={field.handleBlur}
-                                  onChange={(e) => {
-                                    // Convert to uppercase
-                                    const uppercaseValue = e.target.value.toUpperCase()
-                                    field.handleChange(uppercaseValue)
-                                  }}
-                                  disabled={isSubmitting}
-                                  aria-invalid={isInvalid}
-                                  placeholder="John"
-                                  autoComplete="off"
-                                  style={{ textTransform: 'uppercase' }}
-                                />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="driverOtherName"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Other Name</FieldLabel>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  value={field.state.value}
-                                  onBlur={field.handleBlur}
-                                  onChange={(e) => {
-                                    // Convert to uppercase
-                                    const uppercaseValue = e.target.value.toUpperCase()
-                                    field.handleChange(uppercaseValue)
-                                  }}
-                                  disabled={isSubmitting}
-                                  aria-invalid={isInvalid}
-                                  placeholder="Doe"
-                                  autoComplete="off"
-                                  style={{ textTransform: 'uppercase' }}
-                                />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="driverLastName"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Last Name</FieldLabel>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  value={field.state.value}
-                                  onBlur={field.handleBlur}
-                                  onChange={(e) => {
-                                    // Convert to uppercase
-                                    const uppercaseValue = e.target.value.toUpperCase()
-                                    field.handleChange(uppercaseValue)
-                                  }}
-                                  disabled={isSubmitting}
-                                  aria-invalid={isInvalid}
-                                  placeholder="Smith"
-                                  autoComplete="off"
-                                  style={{ textTransform: 'uppercase' }}
-                                />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="driverPhone"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Phone #</FieldLabel>
-                                  <PhoneInput
-                                    autoComplete="off"
-                                    placeholder="Enter customer's phone number"
-                                    className="col-span-3"
-                                    defaultCountry="GH"
-                                    value={field.state.value}
-                                    onBlur={field.handleBlur}
-                                    onChange={(value) => field.handleChange(value)}
-                                    aria-invalid={isInvalid}
-                                    disabled={isSubmitting}
-                                  />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="driverLocation"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Location</FieldLabel>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  value={field.state.value}
-                                  onBlur={field.handleBlur}
-                                  onChange={(e) => {
-                                    // Convert to uppercase
-                                    const uppercaseValue = e.target.value.toUpperCase()
-                                    field.handleChange(uppercaseValue)
-                                  }}
-                                  disabled={isSubmitting}
-                                  aria-invalid={isInvalid}
-                                  placeholder="Smith"
-                                  autoComplete="off"
-                                  style={{ textTransform: 'uppercase' }}
-                                />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="driverHeadshot"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Papers</FieldLabel>
-                                <FileUploader
-                                    value={field.state.value}
-                                    onValueChange={(files) => {
-                                      if (!isSubmitting) {
-                                        field.handleChange(files || [])
-                                      }
-                                    }}
-                                    dropzoneOptions={{
-                                        maxFiles: 4,
-                                        maxSize: 1024 * 1024 * 4,
-                                        multiple: true,
-                                        accept: {
-                                            "application/*": [".pdf"],
-                                        },
-                                        disabled: isSubmitting,
-                                    }}
-                                    className={`relative bg-background rounded-lg p-2 ${isSubmitting ? 'pointer-events-none opacity-50' : ''}`}
-                                >
-                                    <FileInput
-                                        id="national-fileInput"
-                                        className="outline-dashed outline-1 outline-slate-500"
-                                    >
-                                        <div className="flex items-center justify-center flex-col py-2 w-full ">
-                                            <CloudUpload className='text-gray-500 w-10 h-10' />
-                                            <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
-                                                <span className="font-semibold">Click to upload </span>
-                                                or drag and drop
-                                            </p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">
-                                                PDF (Exactly 4 files required)
-                                            </p>
-                                        </div>
-                                    </FileInput>
-                                    <FileUploaderContent>
-                                        {field.state.value.length > 0 &&
-                                            field.state.value.map((file, i) => (
-                                                <FileUploaderItem key={i} index={i}>
-                                                    <Paperclip className="h-4 w-4 stroke-current" />
-                                                    <span>{shortenTxt(file.name)}</span>
-                                                </FileUploaderItem>
-                                            ))}
-                                    </FileUploaderContent>
-                                </FileUploader>
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="driverNational"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Papers</FieldLabel>
-                                <FileUploader
-                                    value={field.state.value}
-                                    onValueChange={(files) => {
-                                      if (!isSubmitting) {
-                                        field.handleChange(files || [])
-                                      }
-                                    }}
-                                    dropzoneOptions={{
-                                        maxFiles: 4,
-                                        maxSize: 1024 * 1024 * 4,
-                                        multiple: true,
-                                        accept: {
-                                            "application/*": [".pdf"],
-                                        },
-                                        disabled: isSubmitting,
-                                    }}
-                                    className={`relative bg-background rounded-lg p-2 ${isSubmitting ? 'pointer-events-none opacity-50' : ''}`}
-                                >
-                                    <FileInput
-                                        id="national-fileInput"
-                                        className="outline-dashed outline-1 outline-slate-500"
-                                    >
-                                        <div className="flex items-center justify-center flex-col py-2 w-full ">
-                                            <CloudUpload className='text-gray-500 w-10 h-10' />
-                                            <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
-                                                <span className="font-semibold">Click to upload </span>
-                                                or drag and drop
-                                            </p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">
-                                                PDF (Exactly 4 files required)
-                                            </p>
-                                        </div>
-                                    </FileInput>
-                                    <FileUploaderContent>
-                                        {field.state.value.length > 0 &&
-                                            field.state.value.map((file, i) => (
-                                                <FileUploaderItem key={i} index={i}>
-                                                    <Paperclip className="h-4 w-4 stroke-current" />
-                                                    <span>{shortenTxt(file.name)}</span>
-                                                </FileUploaderItem>
-                                            ))}
-                                    </FileUploaderContent>
-                                </FileUploader>
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="guarantorFirstName"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">First Name</FieldLabel>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  value={field.state.value}
-                                  onBlur={field.handleBlur}
-                                  onChange={(e) => {
-                                    // Convert to uppercase
-                                    const uppercaseValue = e.target.value.toUpperCase()
-                                    field.handleChange(uppercaseValue)
-                                  }}
-                                  disabled={isSubmitting}
-                                  aria-invalid={isInvalid}
-                                  placeholder="John"
-                                  autoComplete="off"
-                                  style={{ textTransform: 'uppercase' }}
-                                />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="guarantorOtherName"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Other Name</FieldLabel>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  value={field.state.value}
-                                  onBlur={field.handleBlur}
-                                  onChange={(e) => {
-                                    // Convert to uppercase
-                                    const uppercaseValue = e.target.value.toUpperCase()
-                                    field.handleChange(uppercaseValue)
-                                  }}
-                                  disabled={isSubmitting}
-                                  aria-invalid={isInvalid}
-                                  placeholder="Doe"
-                                  autoComplete="off"
-                                  style={{ textTransform: 'uppercase' }}
-                                />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="guarantorLastName"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Last Name</FieldLabel>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  value={field.state.value}
-                                  onBlur={field.handleBlur}
-                                  onChange={(e) => {
-                                    // Convert to uppercase
-                                    const uppercaseValue = e.target.value.toUpperCase()
-                                    field.handleChange(uppercaseValue)
-                                  }}
-                                  disabled={isSubmitting}
-                                  aria-invalid={isInvalid}
-                                  placeholder="Smith"
-                                  autoComplete="off"
-                                  style={{ textTransform: 'uppercase' }}
-                                />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="guarantorPhone"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Phone #</FieldLabel>
-                                  <PhoneInput
-                                    autoComplete="off"
-                                    placeholder="Enter customer's phone number"
-                                    className="col-span-3"
-                                    defaultCountry="GH"
-                                    value={field.state.value}
-                                    onBlur={field.handleBlur}
-                                    onChange={(value) => field.handleChange(value)}
-                                    aria-invalid={isInvalid}
-                                    disabled={isSubmitting}
-                                  />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="guarantorLocation"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Location</FieldLabel>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  value={field.state.value}
-                                  onBlur={field.handleBlur}
-                                  onChange={(e) => {
-                                    // Convert to uppercase
-                                    const uppercaseValue = e.target.value.toUpperCase()
-                                    field.handleChange(uppercaseValue)
-                                  }}
-                                  disabled={isSubmitting}
-                                  aria-invalid={isInvalid}
-                                  placeholder="Smith"
-                                  autoComplete="off"
-                                  style={{ textTransform: 'uppercase' }}
-                                />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="guarantorHeadshot"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Papers</FieldLabel>
-                                <FileUploader
-                                    value={field.state.value}
-                                    onValueChange={(files) => {
-                                      if (!isSubmitting) {
-                                        field.handleChange(files || [])
-                                      }
-                                    }}
-                                    dropzoneOptions={{
-                                        maxFiles: 1,
-                                        maxSize: 1024 * 1024 * 4,
-                                        multiple: false,
-                                        accept: {
-                                            "application/*": [".pdf"],
-                                        },
-                                        disabled: isSubmitting,
-                                    }}
-                                    className={`relative bg-background rounded-lg p-2 ${isSubmitting ? 'pointer-events-none opacity-50' : ''}`}
-                                >
-                                    <FileInput
-                                        id="national-fileInput"
-                                        className="outline-dashed outline-1 outline-slate-500"
-                                    >
-                                        <div className="flex items-center justify-center flex-col py-2 w-full ">
-                                            <CloudUpload className='text-gray-500 w-10 h-10' />
-                                            <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
-                                                <span className="font-semibold">Click to upload </span>
-                                                or drag and drop
-                                            </p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">
-                                                PDF (Exactly 1 file required)
-                                            </p>
-                                        </div>
-                                    </FileInput>
-                                    <FileUploaderContent>
-                                        {field.state.value.length > 0 &&
-                                            field.state.value.map((file, i) => (
-                                                <FileUploaderItem key={i} index={i}>
-                                                    <Paperclip className="h-4 w-4 stroke-current" />
-                                                    <span>{shortenTxt(file.name)}</span>
-                                                </FileUploaderItem>
-                                            ))}
-                                    </FileUploaderContent>
-                                </FileUploader>
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="guarantorNational"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Papers</FieldLabel>
-                                <FileUploader
-                                    value={field.state.value}
-                                    onValueChange={(files) => {
-                                      if (!isSubmitting) {
-                                        field.handleChange(files || [])
-                                      }
-                                    }}
-                                    dropzoneOptions={{
-                                        maxFiles: 4,
-                                        maxSize: 1024 * 1024 * 4,
-                                        multiple: true,
-                                        accept: {
-                                            "application/*": [".pdf"],
-                                        },
-                                        disabled: isSubmitting,
-                                    }}
-                                    className={`relative bg-background rounded-lg p-2 ${isSubmitting ? 'pointer-events-none opacity-50' : ''}`}
-                                >
-                                    <FileInput
-                                        id="national-fileInput"
-                                        className="outline-dashed outline-1 outline-slate-500"
-                                    >
-                                        <div className="flex items-center justify-center flex-col py-2 w-full ">
-                                            <CloudUpload className='text-gray-500 w-10 h-10' />
-                                            <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
-                                                <span className="font-semibold">Click to upload </span>
-                                                or drag and drop
-                                            </p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">
-                                                PDF (Exactly 4 files required)
-                                            </p>
-                                        </div>
-                                    </FileInput>
-                                    <FileUploaderContent>
-                                        {field.state.value.length > 0 &&
-                                            field.state.value.map((file, i) => (
-                                                <FileUploaderItem key={i} index={i}>
-                                                    <Paperclip className="h-4 w-4 stroke-current" />
-                                                    <span>{shortenTxt(file.name)}</span>
-                                                </FileUploaderItem>
-                                            ))}
-                                    </FileUploaderContent>
-                                </FileUploader>
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="deposit"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Amount(GHS)</FieldLabel>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  value={field.state.value ? formatNumberWithCommas(field.state.value) : ''}
-                                  onBlur={field.handleBlur}
-                                  onChange={(e) => {
-                                    // Remove all non-numeric characters
-                                    const rawValue = e.target.value.replace(/\D/g, '')
-                                    // Store raw numeric value (without commas) in form state
-                                    field.handleChange(rawValue)
-                                  }}
-                                  aria-invalid={isInvalid}
-                                  placeholder="40,000"
-                                  autoComplete="off"
-                                  type="text"
-                                  inputMode="numeric"
-                                  disabled={isSubmitting}
-                                />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="start"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Amount(GHS)</FieldLabel>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  value={field.state.value ? formatNumberWithCommas(field.state.value) : ''}
-                                  onBlur={field.handleBlur}
-                                  onChange={(e) => {
-                                    // Remove all non-numeric characters
-                                    const rawValue = e.target.value.replace(/\D/g, '')
-                                    // Store raw numeric value (without commas) in form state
-                                    field.handleChange(rawValue)
-                                  }}
-                                  aria-invalid={isInvalid}
-                                  placeholder="40,000"
-                                  autoComplete="off"
-                                  type="text"
-                                  inputMode="numeric"
-                                  disabled={isSubmitting}
-                                />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="duration"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Amount(GHS)</FieldLabel>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  value={field.state.value ? formatNumberWithCommas(field.state.value) : ''}
-                                  onBlur={field.handleBlur}
-                                  onChange={(e) => {
-                                    // Remove all non-numeric characters
-                                    const rawValue = e.target.value.replace(/\D/g, '')
-                                    // Store raw numeric value (without commas) in form state
-                                    field.handleChange(rawValue)
-                                  }}
-                                  aria-invalid={isInvalid}
-                                  placeholder="40,000"
-                                  autoComplete="off"
-                                  type="text"
-                                  inputMode="numeric"
-                                  disabled={isSubmitting}
-                                />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="amount"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Amount(GHS)</FieldLabel>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  value={field.state.value ? formatNumberWithCommas(field.state.value) : ''}
-                                  onBlur={field.handleBlur}
-                                  onChange={(e) => {
-                                    // Remove all non-numeric characters
-                                    const rawValue = e.target.value.replace(/\D/g, '')
-                                    // Store raw numeric value (without commas) in form state
-                                    field.handleChange(rawValue)
-                                  }}
-                                  aria-invalid={isInvalid}
-                                  placeholder="40,000"
-                                  autoComplete="off"
-                                  type="text"
-                                  inputMode="numeric"
-                                  disabled={isSubmitting}
-                                />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addContractDriverForm.Field
-                      name="installment"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Amount(GHS)</FieldLabel>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  value={field.state.value ? formatNumberWithCommas(field.state.value) : ''}
-                                  onBlur={field.handleBlur}
-                                  onChange={(e) => {
-                                    // Remove all non-numeric characters
-                                    const rawValue = e.target.value.replace(/\D/g, '')
-                                    // Store raw numeric value (without commas) in form state
-                                    field.handleChange(rawValue)
-                                  }}
-                                  aria-invalid={isInvalid}
-                                  placeholder="40,000"
-                                  autoComplete="off"
-                                  type="number"
-                                  disabled={isSubmitting}
-                                />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    
+                    {
+                      step === 1 && (
+                        <>
+                          <addContractDriverForm.Field
+                            name="driverFirstName"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">First Name</FieldLabel>
+                                      <Input
+                                        id={field.name}
+                                        name={field.name}
+                                        value={field.state.value}
+                                        onBlur={field.handleBlur}
+                                        onChange={(e) => {
+                                          // Convert to uppercase
+                                          const uppercaseValue = e.target.value.toUpperCase()
+                                          field.handleChange(uppercaseValue)
+                                        }}
+                                        disabled={isSubmitting}
+                                        aria-invalid={isInvalid}
+                                        placeholder="John"
+                                        autoComplete="off"
+                                        style={{ textTransform: 'uppercase' }}
+                                      />
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <addContractDriverForm.Field
+                            name="driverOtherName"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">Other Name</FieldLabel>
+                                      <Input
+                                        id={field.name}
+                                        name={field.name}
+                                        value={field.state.value}
+                                        onBlur={field.handleBlur}
+                                        onChange={(e) => {
+                                          // Convert to uppercase
+                                          const uppercaseValue = e.target.value.toUpperCase()
+                                          field.handleChange(uppercaseValue)
+                                        }}
+                                        disabled={isSubmitting}
+                                        aria-invalid={isInvalid}
+                                        placeholder="Doe"
+                                        autoComplete="off"
+                                        style={{ textTransform: 'uppercase' }}
+                                      />
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <addContractDriverForm.Field
+                            name="driverLastName"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">Last Name</FieldLabel>
+                                      <Input
+                                        id={field.name}
+                                        name={field.name}
+                                        value={field.state.value}
+                                        onBlur={field.handleBlur}
+                                        onChange={(e) => {
+                                          // Convert to uppercase
+                                          const uppercaseValue = e.target.value.toUpperCase()
+                                          field.handleChange(uppercaseValue)
+                                        }}
+                                        disabled={isSubmitting}
+                                        aria-invalid={isInvalid}
+                                        placeholder="Smith"
+                                        autoComplete="off"
+                                        style={{ textTransform: 'uppercase' }}
+                                      />
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <addContractDriverForm.Field
+                            name="driverPhone"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">Phone #</FieldLabel>
+                                        <PhoneInput
+                                          autoComplete="off"
+                                          placeholder="Enter customer's phone number"
+                                          className="col-span-3"
+                                          defaultCountry="GH"
+                                          value={field.state.value}
+                                          onBlur={field.handleBlur}
+                                          onChange={(value) => field.handleChange(value)}
+                                          aria-invalid={isInvalid}
+                                          disabled={isSubmitting}
+                                        />
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <addContractDriverForm.Field
+                            name="driverLocation"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">Location</FieldLabel>
+                                      <Input
+                                        id={field.name}
+                                        name={field.name}
+                                        value={field.state.value}
+                                        onBlur={field.handleBlur}
+                                        onChange={(e) => {
+                                          // Convert to uppercase
+                                          const uppercaseValue = e.target.value.toUpperCase()
+                                          field.handleChange(uppercaseValue)
+                                        }}
+                                        disabled={isSubmitting}
+                                        aria-invalid={isInvalid}
+                                        placeholder="Smith"
+                                        autoComplete="off"
+                                        style={{ textTransform: 'uppercase' }}
+                                      />
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <addContractDriverForm.Field
+                            name="driverHeadshot"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">Headshot</FieldLabel>
+                                      <FileUploader
+                                          value={field.state.value}
+                                          onValueChange={(files) => {
+                                            if (!isSubmitting) {
+                                              field.handleChange(files || [])
+                                            }
+                                          }}
+                                          dropzoneOptions={{
+                                              maxFiles: 1,
+                                              maxSize: 1024 * 1024 * 4,
+                                              multiple: true,
+                                              accept: {
+                                                  "image/*": [".png", ".jpg", ".jpeg"],
+                                              },
+                                              disabled: isSubmitting,
+                                          }}
+                                          className={`relative bg-background rounded-lg p-2 ${isSubmitting ? 'pointer-events-none opacity-50' : ''}`}
+                                      >
+                                          <FileInput
+                                              id="national-fileInput"
+                                              className="outline-dashed outline-1 outline-slate-500"
+                                          >
+                                              <div className="flex items-center justify-center flex-col py-2 w-full ">
+                                                  <CloudUpload className='text-gray-500 w-10 h-10' />
+                                                  <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
+                                                      <span className="font-semibold">Click to upload </span>
+                                                      or drag and drop
+                                                  </p>
+                                                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                      PNG, JPG, or JPEG (Exactly 1 file required)
+                                                  </p>
+                                              </div>
+                                          </FileInput>
+                                          <FileUploaderContent>
+                                              {field.state.value.length > 0 &&
+                                                  field.state.value.map((file, i) => (
+                                                      <FileUploaderItem key={i} index={i}>
+                                                          <Paperclip className="h-4 w-4 stroke-current" />
+                                                          <span>{shortenTxt(file.name)}</span>
+                                                      </FileUploaderItem>
+                                                  ))}
+                                          </FileUploaderContent>
+                                      </FileUploader>
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <addContractDriverForm.Field
+                            name="driverNational"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">National ID</FieldLabel>
+                                      <FileUploader
+                                          value={field.state.value}
+                                          onValueChange={(files) => {
+                                            if (!isSubmitting) {
+                                              field.handleChange(files || [])
+                                            }
+                                          }}
+                                          dropzoneOptions={{
+                                              maxFiles: 2,
+                                              maxSize: 1024 * 1024 * 4,
+                                              multiple: true,
+                                              accept: {
+                                                  "image/*": [".png", ".jpg", ".jpeg"],
+                                              },
+                                              disabled: isSubmitting,
+                                          }}
+                                          className={`relative bg-background rounded-lg p-2 ${isSubmitting ? 'pointer-events-none opacity-50' : ''}`}
+                                      >
+                                          <FileInput
+                                              id="national-fileInput"
+                                              className="outline-dashed outline-1 outline-slate-500"
+                                          >
+                                              <div className="flex items-center justify-center flex-col py-2 w-full ">
+                                                  <CloudUpload className='text-gray-500 w-10 h-10' />
+                                                  <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
+                                                      <span className="font-semibold">Click to upload </span>
+                                                      or drag and drop
+                                                  </p>
+                                                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                      PNG, JPG, or JPEG (Exactly 2 files required)
+                                                  </p>
+                                              </div>
+                                          </FileInput>
+                                          <FileUploaderContent>
+                                              {field.state.value.length > 0 &&
+                                                  field.state.value.map((file, i) => (
+                                                      <FileUploaderItem key={i} index={i}>
+                                                          <Paperclip className="h-4 w-4 stroke-current" />
+                                                          <span>{shortenTxt(file.name)}</span>
+                                                      </FileUploaderItem>
+                                                  ))}
+                                          </FileUploaderContent>
+                                      </FileUploader>
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                        </>
+                      )
+                    }
+                    {
+                      step === 2 && (
+                        <>
+                          <addContractDriverForm.Field
+                            name="guarantorFirstName"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">First Name</FieldLabel>
+                                      <Input
+                                        id={field.name}
+                                        name={field.name}
+                                        value={field.state.value}
+                                        onBlur={field.handleBlur}
+                                        onChange={(e) => {
+                                          // Convert to uppercase
+                                          const uppercaseValue = e.target.value.toUpperCase()
+                                          field.handleChange(uppercaseValue)
+                                        }}
+                                        disabled={isSubmitting}
+                                        aria-invalid={isInvalid}
+                                        placeholder="John"
+                                        autoComplete="off"
+                                        style={{ textTransform: 'uppercase' }}
+                                      />
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <addContractDriverForm.Field
+                            name="guarantorOtherName"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">Other Name</FieldLabel>
+                                      <Input
+                                        id={field.name}
+                                        name={field.name}
+                                        value={field.state.value}
+                                        onBlur={field.handleBlur}
+                                        onChange={(e) => {
+                                          // Convert to uppercase
+                                          const uppercaseValue = e.target.value.toUpperCase()
+                                          field.handleChange(uppercaseValue)
+                                        }}
+                                        disabled={isSubmitting}
+                                        aria-invalid={isInvalid}
+                                        placeholder="Doe"
+                                        autoComplete="off"
+                                        style={{ textTransform: 'uppercase' }}
+                                      />
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <addContractDriverForm.Field
+                            name="guarantorLastName"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">Last Name</FieldLabel>
+                                      <Input
+                                        id={field.name}
+                                        name={field.name}
+                                        value={field.state.value}
+                                        onBlur={field.handleBlur}
+                                        onChange={(e) => {
+                                          // Convert to uppercase
+                                          const uppercaseValue = e.target.value.toUpperCase()
+                                          field.handleChange(uppercaseValue)
+                                        }}
+                                        disabled={isSubmitting}
+                                        aria-invalid={isInvalid}
+                                        placeholder="Smith"
+                                        autoComplete="off"
+                                        style={{ textTransform: 'uppercase' }}
+                                      />
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <addContractDriverForm.Field
+                            name="guarantorPhone"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">Phone #</FieldLabel>
+                                        <PhoneInput
+                                          autoComplete="off"
+                                          placeholder="Enter customer's phone number"
+                                          className="col-span-3"
+                                          defaultCountry="GH"
+                                          value={field.state.value}
+                                          onBlur={field.handleBlur}
+                                          onChange={(value) => field.handleChange(value)}
+                                          aria-invalid={isInvalid}
+                                          disabled={isSubmitting}
+                                        />
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <addContractDriverForm.Field
+                            name="guarantorLocation"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">Location</FieldLabel>
+                                      <Input
+                                        id={field.name}
+                                        name={field.name}
+                                        value={field.state.value}
+                                        onBlur={field.handleBlur}
+                                        onChange={(e) => {
+                                          // Convert to uppercase
+                                          const uppercaseValue = e.target.value.toUpperCase()
+                                          field.handleChange(uppercaseValue)
+                                        }}
+                                        disabled={isSubmitting}
+                                        aria-invalid={isInvalid}
+                                        placeholder="Smith"
+                                        autoComplete="off"
+                                        style={{ textTransform: 'uppercase' }}
+                                      />
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <addContractDriverForm.Field
+                            name="guarantorHeadshot"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">Headshot</FieldLabel>
+                                      <FileUploader
+                                          value={field.state.value}
+                                          onValueChange={(files) => {
+                                            if (!isSubmitting) {
+                                              field.handleChange(files || [])
+                                            }
+                                          }}
+                                          dropzoneOptions={{
+                                              maxFiles: 1,
+                                              maxSize: 1024 * 1024 * 4,
+                                              multiple: false,
+                                              accept: {
+                                                  "image/*": [".png", ".jpg", ".jpeg"],
+                                              },
+                                              disabled: isSubmitting,
+                                          }}
+                                          className={`relative bg-background rounded-lg p-2 ${isSubmitting ? 'pointer-events-none opacity-50' : ''}`}
+                                      >
+                                          <FileInput
+                                              id="national-fileInput"
+                                              className="outline-dashed outline-1 outline-slate-500"
+                                          >
+                                              <div className="flex items-center justify-center flex-col py-2 w-full ">
+                                                  <CloudUpload className='text-gray-500 w-10 h-10' />
+                                                  <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
+                                                      <span className="font-semibold">Click to upload </span>
+                                                      or drag and drop
+                                                  </p>
+                                                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                      PNG, JPG, or JPEG (Exactly 1 file required)
+                                                  </p>
+                                              </div>
+                                          </FileInput>
+                                          <FileUploaderContent>
+                                              {field.state.value.length > 0 &&
+                                                  field.state.value.map((file, i) => (
+                                                      <FileUploaderItem key={i} index={i}>
+                                                          <Paperclip className="h-4 w-4 stroke-current" />
+                                                          <span>{shortenTxt(file.name)}</span>
+                                                      </FileUploaderItem>
+                                                  ))}
+                                          </FileUploaderContent>
+                                      </FileUploader>
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <addContractDriverForm.Field
+                            name="guarantorNational"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">National ID</FieldLabel>
+                                      <FileUploader
+                                          value={field.state.value}
+                                          onValueChange={(files) => {
+                                            if (!isSubmitting) {
+                                              field.handleChange(files || [])
+                                            }
+                                          }}
+                                          dropzoneOptions={{
+                                              maxFiles: 2,
+                                              maxSize: 1024 * 1024 * 4,
+                                              multiple: true,
+                                              accept: {
+                                                  "image/*": [".png", ".jpg", ".jpeg"],
+                                              },
+                                              disabled: isSubmitting,
+                                          }}
+                                          className={`relative bg-background rounded-lg p-2 ${isSubmitting ? 'pointer-events-none opacity-50' : ''}`}
+                                      >
+                                          <FileInput
+                                              id="national-fileInput"
+                                              className="outline-dashed outline-1 outline-slate-500"
+                                          >
+                                              <div className="flex items-center justify-center flex-col py-2 w-full ">
+                                                  <CloudUpload className='text-gray-500 w-10 h-10' />
+                                                  <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
+                                                      <span className="font-semibold">Click to upload </span>
+                                                      or drag and drop
+                                                  </p>
+                                                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                      PNG, JPG, or JPEG (Exactly 2 files required)
+                                                  </p>
+                                              </div>
+                                          </FileInput>
+                                          <FileUploaderContent>
+                                              {field.state.value.length > 0 &&
+                                                  field.state.value.map((file, i) => (
+                                                      <FileUploaderItem key={i} index={i}>
+                                                          <Paperclip className="h-4 w-4 stroke-current" />
+                                                          <span>{shortenTxt(file.name)}</span>
+                                                      </FileUploaderItem>
+                                                  ))}
+                                          </FileUploaderContent>
+                                      </FileUploader>
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                        </>
+                      )
+                    }
+                    {
+                      step === 3 && (
+                        <>
+                          <addContractDriverForm.Field
+                            name="deposit"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">Deposit(GHS)</FieldLabel>
+                                      <Input
+                                        id={field.name}
+                                        name={field.name}
+                                        value={field.state.value ? formatNumberWithCommas(field.state.value) : ''}
+                                        onBlur={field.handleBlur}
+                                        onChange={(e) => {
+                                          // Remove all non-numeric characters
+                                          const rawValue = e.target.value.replace(/\D/g, '')
+                                          // Store raw numeric value (without commas) in form state
+                                          field.handleChange(rawValue)
+                                        }}
+                                        aria-invalid={isInvalid}
+                                        placeholder="5,000"
+                                        autoComplete="off"
+                                        type="text"
+                                        inputMode="numeric"
+                                        disabled={isSubmitting}
+                                      />
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <addContractDriverForm.Field
+                            name="start"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">Start Date</FieldLabel>
+                                      <Input
+                                        id={field.name}
+                                        name={field.name}
+                                        value={field.state.value ? formatNumberWithCommas(field.state.value) : ''}
+                                        onBlur={field.handleBlur}
+                                        onChange={(e) => {
+                                          // Remove all non-numeric characters
+                                          const rawValue = e.target.value.replace(/\D/g, '')
+                                          // Store raw numeric value (without commas) in form state
+                                          field.handleChange(rawValue)
+                                        }}
+                                        aria-invalid={isInvalid}
+                                        placeholder="2026-01-01"
+                                        autoComplete="off"
+                                        type="text"
+                                        inputMode="numeric"
+                                        disabled={isSubmitting}
+                                      />
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <addContractDriverForm.Field
+                            name="duration"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">Duration(Weeks)</FieldLabel>
+                                      <Input
+                                        id={field.name}
+                                        name={field.name}
+                                        value={field.state.value ? formatNumberWithCommas(field.state.value) : ''}
+                                        onBlur={field.handleBlur}
+                                        onChange={(e) => {
+                                          // Remove all non-numeric characters
+                                          const rawValue = e.target.value.replace(/\D/g, '')
+                                          // Store raw numeric value (without commas) in form state
+                                          field.handleChange(rawValue)
+                                        }}
+                                        aria-invalid={isInvalid}
+                                        placeholder="93"
+                                        autoComplete="off"
+                                        type="text"
+                                        inputMode="numeric"
+                                        disabled={isSubmitting}
+                                      />
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <addContractDriverForm.Field
+                            name="amount"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">Total Amount(GHS)</FieldLabel>
+                                      <Input
+                                        id={field.name}
+                                        name={field.name}
+                                        value={field.state.value ? formatNumberWithCommas(field.state.value) : ''}
+                                        onBlur={field.handleBlur}
+                                        onChange={(e) => {
+                                          // Remove all non-numeric characters
+                                          const rawValue = e.target.value.replace(/\D/g, '')
+                                          // Store raw numeric value (without commas) in form state
+                                          field.handleChange(rawValue)
+                                        }}
+                                        aria-invalid={isInvalid}
+                                        placeholder="93,000"
+                                        autoComplete="off"
+                                        type="text"
+                                        inputMode="numeric"
+                                        disabled={isSubmitting}
+                                      />
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                          <addContractDriverForm.Field
+                            name="installment"
+                            children={(field) => {
+                              const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid
+                              return (
+                                <Field data-invalid={isInvalid}>
+                                  <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                                  <FieldLabel htmlFor={field.name} className="text-primary">Installment Amount(GHS)</FieldLabel>
+                                      <Input
+                                        id={field.name}
+                                        name={field.name}
+                                        value={field.state.value ? formatNumberWithCommas(field.state.value) : ''}
+                                        onBlur={field.handleBlur}
+                                        onChange={(e) => {
+                                          // Remove all non-numeric characters
+                                          const rawValue = e.target.value.replace(/\D/g, '')
+                                          // Store raw numeric value (without commas) in form state
+                                          field.handleChange(rawValue)
+                                        }}
+                                        aria-invalid={isInvalid}
+                                        placeholder="1,000"
+                                        autoComplete="off"
+                                        type="number"
+                                        disabled={isSubmitting}
+                                      />
+                                      {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                      )}
+                                  </div>
+                                </Field>
+                              )
+                            }}
+                          />
+                        </>
+                      )
+                    }
                   </FieldGroup>
-                  <Field orientation="horizontal" className="flex justify-end gap-2 mt-12">
-                    <Button type="button" variant="outline" onClick={() => addContractDriverForm.reset()} disabled={isSubmitting}>
-                      Reset
-                    </Button>
-                    <Button type="submit" form="add-inventory-form" disabled={isSubmitting}>
-                      {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <CirclePile className="h-4 w-4" />}
-                      Submit
-                    </Button>
-                  </Field>
+                  
+                  {/* Step Navigation Footer */}
+                  <div className="flex flex-col gap-6 mt-12 pt-6 border-t">
+                    {/* Step Indicator */}
+                    <div className="flex flex-col items-center gap-3">
+                      <div className="flex items-center gap-2">
+                        <div className={`h-2 w-12 rounded-full transition-colors ${step === 1 ? 'bg-primary' : step > 1 ? 'bg-primary/50' : 'bg-muted'}`} />
+                        <div className={`h-2 w-12 rounded-full transition-colors ${step === 2 ? 'bg-primary' : step > 2 ? 'bg-primary/50' : 'bg-muted'}`} />
+                        <div className={`h-2 w-12 rounded-full transition-colors ${step === 3 ? 'bg-primary' : 'bg-muted'}`} />
+                      </div>
+                      <span className="text-sm font-medium text-muted-foreground">
+                        Step {step} of 3
+                      </span>
+                    </div>
+                    
+                    {/* Navigation Buttons */}
+                    <div className="flex items-center justify-between gap-3">
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        onClick={() => {
+                          addContractDriverForm.reset()
+                          setStep(1)
+                        }} 
+                        disabled={isSubmitting}
+                        className="min-w-[80px]"
+                      >
+                        Reset
+                      </Button>
+                      
+                      <div className="flex items-center gap-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => setStep(step - 1)}
+                          disabled={step === 1 || isSubmitting}
+                          className="min-w-[100px]"
+                        >
+                          <ChevronLeft className="h-4 w-4" />
+                          Previous
+                        </Button>
+                        {step < 3 ? (
+                          <Button
+                            type="button"
+                            onClick={() => setStep(step + 1)}
+                            disabled={isSubmitting}
+                            className="w-[120px]"
+                          >
+                            Next
+                            <ChevronRight className="h-4 w-4" />
+                          </Button>
+                        ) : (
+                          <Button 
+                            type="submit" 
+                            form="add-inventory-form" 
+                            disabled={isSubmitting}
+                            className="w-[120px]"
+                          >
+                            {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <CirclePile className="h-4 w-4" />}
+                            Submit
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </form>  
             </div>
           </div>
