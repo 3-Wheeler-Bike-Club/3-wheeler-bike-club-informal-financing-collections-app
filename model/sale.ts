@@ -20,9 +20,6 @@ const SaleSchema = new mongoose.Schema(
             vin: {
                 type: String,
             },
-            papers: {
-                type: [String],
-            },
         },
         customer: {
             firstname: {

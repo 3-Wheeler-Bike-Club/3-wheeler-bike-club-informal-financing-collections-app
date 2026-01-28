@@ -146,7 +146,6 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
               model: sale?.vehicle.model,
               color: sale?.vehicle.color,
               vin: sale?.vehicle.vin,
-              papers: sale?.vehicle.papers,
             },
             {
               firstname: value.customerFirstName,

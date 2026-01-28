@@ -9,7 +9,6 @@ export interface Inventory {
         model: string
         color: string
         vin: string
-        papers: string[]
     }
     amount: number
     status: "in stock" | "out of stock"

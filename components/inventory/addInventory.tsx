@@ -57,9 +57,6 @@ const addInventoryFormSchema = z.object({
   vehicleVin: z
     .string()
     .min(1, "VIN is required"),
-  vehiclePapers: z
-    .array(z.instanceof(File))
-    .length(4, "Upload all required files"),
   amount: z
     .string()
     .min(1, "Amount is required"),
@@ -73,22 +70,6 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const { startUpload, routeConfig } = useUploadThing("vehicleDocumentUploader", {
-    onClientUploadComplete: () => {
-      toast.info("Vehicle Documents Uploaded", {
-        description: "Please wait while we save the rest of your details",
-      })
-    },
-    onUploadError: () => {
-      toast.error("Failed to upload files.", {
-        description: `Something went wrong, please try again`,
-      })
-      setIsSubmitting(false);
-    },
-    onUploadBegin: (file: string) => {
-      console.log("upload has begun for", file);
-    },
-  });
 
   const addInventoryForm = useForm({
     defaultValues: {
@@ -97,7 +78,6 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
       vehicleModel: "",
       vehicleColor: "",
       vehicleVin: "",
-      vehiclePapers: [] as File[],
       amount: "",
 
     },
@@ -108,34 +88,24 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
       setIsSubmitting(true)
       console.log(value)
       try {
-        const uploadFiles = await startUpload(value.vehiclePapers);
-        if (uploadFiles) {
-          const postInventory = await postInventoryAction(
-            value.branch,
-            {
-              type: value.vehicleType as "motorcycle" | "tricycle",
-              model: value.vehicleModel,
-              color: value.vehicleColor,
-              vin: value.vehicleVin,
-              papers: uploadFiles.map((file) => file.ufsUrl),
-            },
-            Number(value.amount),
-          );
-          if (postInventory) {
-            toast.success("Vehicle Stock Added to Inventory", {
-              description: "You can now add another vehicle to the inventory or close this dialog",
-            })
-            setIsSubmitting(false);
-            addInventoryForm.reset();
-            getInventory();
-          }
-        } else {
-          toast.error("Failed to post inventory.", {
-            description: `Something went wrong, please try again`,
+        const postInventory = await postInventoryAction(
+          value.branch,
+          {
+            type: value.vehicleType as "motorcycle" | "tricycle",
+            model: value.vehicleModel,
+            color: value.vehicleColor,
+            vin: value.vehicleVin,
+          },
+          Number(value.amount),
+        );
+        if (postInventory) {
+          toast.success("Vehicle Stock Added to Inventory", {
+            description: "You can now add another vehicle to the inventory or close this dialog",
           })
-          setIsSubmitting(false)
+          setIsSubmitting(false);
+          addInventoryForm.reset();
+          getInventory();
         }
-
       } catch (error) {
         console.error("Form submission error", error);
         toast.error("Failed to submit the form.", {
@@ -156,12 +126,12 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <div className="mx-auto w-full max-w-sm pb-6">
-          <DialogHeader>
-            <DialogTitle>Add Vehicle</DialogTitle>
-            <DialogDescription>
-                Log a new vehicle arrival to the inventory.
-            </DialogDescription>
-          </DialogHeader>
+            <DialogHeader>
+              <DialogTitle>Add Vehicle</DialogTitle>
+              <DialogDescription>
+                  Log a new vehicle arrival to the inventory.
+              </DialogDescription>
+            </DialogHeader>
             <div className="flex flex-col p-4 no-scrollbar -mx-4 max-h-[50vh] overflow-y-auto">
                 <form
                   className="space-y-6"
@@ -344,66 +314,6 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
                                   style={{ textTransform: 'uppercase' }}
                                   disabled={isSubmitting}
                                 />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
-                            </div>
-                          </Field>
-                        )
-                      }}
-                    />
-                    <addInventoryForm.Field
-                      name="vehiclePapers"
-                      children={(field) => {
-                        const isInvalid =
-                          field.state.meta.isTouched && !field.state.meta.isValid
-                        return (
-                          <Field data-invalid={isInvalid}>
-                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Papers</FieldLabel>
-                                <FileUploader
-                                    value={field.state.value}
-                                    onValueChange={(files) => {
-                                      if (!isSubmitting) {
-                                        field.handleChange(files || [])
-                                      }
-                                    }}
-                                    dropzoneOptions={{
-                                        maxFiles: 4,
-                                        maxSize: 1024 * 1024 * 4,
-                                        multiple: true,
-                                        accept: {
-                                            "application/*": [".pdf"],
-                                        },
-                                        disabled: isSubmitting,
-                                    }}
-                                    className={`relative bg-background rounded-lg p-2 ${isSubmitting ? 'pointer-events-none opacity-50' : ''}`}
-                                >
-                                    <FileInput
-                                        id="national-fileInput"
-                                        className="outline-dashed outline-1 outline-slate-500"
-                                    >
-                                        <div className="flex items-center justify-center flex-col py-2 w-full ">
-                                            <CloudUpload className='text-gray-500 w-10 h-10' />
-                                            <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
-                                                <span className="font-semibold">Click to upload </span>
-                                                or drag and drop
-                                            </p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">
-                                                PDF (Exactly 4 files required)
-                                            </p>
-                                        </div>
-                                    </FileInput>
-                                    <FileUploaderContent>
-                                        {field.state.value.length > 0 &&
-                                            field.state.value.map((file, i) => (
-                                                <FileUploaderItem key={i} index={i}>
-                                                    <Paperclip className="h-4 w-4 stroke-current" />
-                                                    <span>{shortenTxt(file.name)}</span>
-                                                </FileUploaderItem>
-                                            ))}
-                                    </FileUploaderContent>
-                                </FileUploader>
                                 {isInvalid && (
                                   <FieldError errors={field.state.meta.errors} />
                                 )}

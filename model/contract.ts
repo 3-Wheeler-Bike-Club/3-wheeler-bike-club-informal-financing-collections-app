@@ -54,6 +54,9 @@ const ContractSchema = new mongoose.Schema(
             location: {
                 type: String,
             },
+            headshot:{
+                type: String,
+            },
             national:{
                 type: String,
             }
@@ -69,6 +72,12 @@ const ContractSchema = new mongoose.Schema(
                 type: String,
             },
             phone: {
+                type: String,
+            },
+            location: {
+                type: String,
+            },
+            headshot:{
                 type: String,
             },
             national: {

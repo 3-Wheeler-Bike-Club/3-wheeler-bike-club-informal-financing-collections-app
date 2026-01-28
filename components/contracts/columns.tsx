@@ -89,7 +89,7 @@ export const columns: ColumnDef<Contract>[] = [
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <AddContractDriver open={openAddContractDriver} onOpenChange={setOpenAddContractDriver} />
+              <AddContractDriver open={openAddContractDriver} onOpenChange={setOpenAddContractDriver} contract={contract} />
               <AddContractPayment open={openAddContractPayment} onOpenChange={setOpenAddContractPayment} />
             </>
           )

@@ -9,7 +9,6 @@ export interface Sale {
         model: string
         color: string
         vin: string
-        papers: string[]
     }
     customer: {
         firstname: string

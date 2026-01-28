@@ -7,7 +7,6 @@ export async function postInventoryAction(
         model: string
         color: string
         vin: string
-        papers: string[]
     },
     amount: number,
 ) {
