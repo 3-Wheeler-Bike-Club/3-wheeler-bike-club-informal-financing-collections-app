@@ -12,13 +12,17 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-export function AddContractPayment() {
+
+interface AddContractPaymentProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
+
+
+export function AddContractPayment({ open, onOpenChange }: AddContractPaymentProps) {
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <form>
-        <DialogTrigger asChild>
-          <Button variant="outline">Open Dialog</Button>
-        </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Add Vehicle Payment</DialogTitle>

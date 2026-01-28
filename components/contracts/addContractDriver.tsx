@@ -11,17 +11,20 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Plus } from "lucide-react"
 
-export function AddContractDriver() {
+interface AddContractDriverProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
+
+export function AddContractDriver({ open, onOpenChange }: AddContractDriverProps) {
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <form>
-        <DialogTrigger asChild>
-          <Button variant="outline">Open Dialog</Button>
-        </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add Driver</DialogTitle>
+            <DialogTitle>Assign Driver</DialogTitle>
             <DialogDescription>
               Make changes to your profile here. Click save when you&apos;re
               done.

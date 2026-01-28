@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Contract } from "@/hooks/useGetContracts";
-import { MoreHorizontal } from "lucide-react" 
+import { CreditCard, MoreHorizontal, UserLock } from "lucide-react" 
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -10,6 +10,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useState } from "react";
+import { AddContractDriver } from "./addContractDriver";
+import { AddContractPayment } from "./addContractPayment";
 
 export const columns: ColumnDef<Contract>[] = [
     {
@@ -56,19 +59,39 @@ export const columns: ColumnDef<Contract>[] = [
         id: "actions",
         cell: ({ row }) => {
           const contract = row.original
+
+          const [openAddContractDriver, setOpenAddContractDriver] = useState(false)
+          const [openAddContractPayment, setOpenAddContractPayment] = useState(false)
+          
+          const handleOpenAddContractDriver = () => {
+            setOpenAddContractDriver(true)
+          }
+
+          const handleOpenAddContractPayment = () => {
+            setOpenAddContractPayment(true)
+          }
      
           return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>Assign Driver to Contract</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="h-8 w-8 p-0">
+                    <span className="sr-only">Open menu</span>
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onSelect={handleOpenAddContractDriver}>
+                  <UserLock /> Assign Driver
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={handleOpenAddContractPayment}>
+                    <CreditCard /> Add Payment
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <AddContractDriver open={openAddContractDriver} onOpenChange={setOpenAddContractDriver} />
+              <AddContractPayment open={openAddContractPayment} onOpenChange={setOpenAddContractPayment} />
+            </>
           )
         },
       },
