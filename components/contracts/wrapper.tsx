@@ -9,9 +9,86 @@ import { ContractsProvider } from "./contractsContext";
 import { AddContractOwner } from "./addContractOwner";
 import { DataTable } from "./dataTable";
 import { columns } from "./columns";
+import { useMemo } from "react";
+import type { Contract } from "@/hooks/useGetContracts";
+import { getWeeksFromStartDate } from "@/utils/shorten";
+
+export interface ContractForTable {
+    _id: string
+    branch: "kasoa" | "kumasi"
+    vehicle: {
+        type: "motorcycle" | "tricycle"
+        model: string
+        color: string
+        vin: string
+        license: string
+    }
+    owner: {
+        firstname: string
+        othername: string
+        lastname: string
+        phone: string
+    }
+    driver?: {
+        firstname: string
+        othername: string
+        lastname: string
+        phone: string
+        location: string
+        headshot: File[]
+        national: File[]
+    }
+    guarantor?: {
+        firstname: string
+        othername: string
+        lastname: string
+        phone: string
+        location: string
+        headshot: File[]
+        national: File[]
+    }
+    deposit: number
+    start: Date
+    end: Date
+    duration: number
+    amount: number
+    installment: number
+    payments?: Array<{
+        week: number
+        amount: number
+        method: "momo" | "cash"
+        reference: Date
+        status: "full" | "partial"
+    }>
+    status: "pending" | "active" | "defaulted" | "completed"
+    createdAt: Date
+    updatedAt: Date
+    weeksFromStart: number
+    expectedAmountFromStart: number
+    currentAmountFromStart: number
+    dueAmountFromStart: number
+}
 
 export function Wrapper() {
     const { contracts, loading, error, getBackContracts } = useGetContracts()
+
+    const contractsForTable = useMemo((): ContractForTable[] | null => {
+        if (!contracts) return null
+        return contracts.map((contract: Contract) => {
+            const weeksFromStart = getWeeksFromStartDate(new Date(contract.start))
+            const expectedAmountFromStart = contract.installment * weeksFromStart
+            const currentAmountFromStart =
+                contract.payments?.reduce((sum, p) => sum + p.amount, 0) ?? 0
+            const dueAmountFromStart = expectedAmountFromStart - currentAmountFromStart
+            return {
+                ...contract,
+                weeksFromStart,
+                expectedAmountFromStart,
+                currentAmountFromStart,
+                dueAmountFromStart,
+            }
+        })
+    }, [contracts])
 
     return (
         <ContractsProvider getBackContracts={getBackContracts}>
@@ -65,13 +142,13 @@ export function Wrapper() {
                             )
                         }
                         {
-                            contracts && contracts.length >= 1 && (
+                            contractsForTable && contractsForTable.length >= 1 && (
                                 <>
                                     <div className="flex flex-col w-full gap-4">
                                         <div className="flex justify-end">
                                             <AddContractOwner getContracts={getBackContracts} />
                                         </div>
-                                        <DataTable columns={columns} data={contracts} />
+                                        <DataTable columns={columns} data={contractsForTable} />
                                     </div>
                                 </>
                             )
