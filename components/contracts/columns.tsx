@@ -1,5 +1,4 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Contract } from "@/hooks/useGetContracts";
 import { CreditCard, File, MoreHorizontal, Signature, UserLock } from "lucide-react" 
 import { Button } from "@/components/ui/button"
 import {
@@ -9,11 +8,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useState } from "react";
-import { AddContractDriver } from "./addContractDriver";
-import { AddContractPayment } from "./addContractPayment";
-import { getWeeksFromStartDate } from "@/utils/shorten";
+import { AddContractDriver } from "@/components/contracts/addContractDriver";
+import { AddContractPayment } from "@/components/contracts/addContractPayment";
+import { ContractForTable } from "@/components/contracts/wrapper";
 
-export const columns: ColumnDef<Contract>[] = [
+export const columns: ColumnDef<ContractForTable>[] = [
     {
         accessorKey: "branch",
         header: "Branch",
@@ -70,6 +69,7 @@ export const columns: ColumnDef<Contract>[] = [
             }
         }
     },
+    /*
     {
       accessorKey: "installment",
       header: "Installment",
@@ -83,20 +83,32 @@ export const columns: ColumnDef<Contract>[] = [
         }
       }
     },
+    */
     {
-      accessorKey: "payments",
-      header: "Payments",
+      accessorKey: "dueAmountFromStart",
+      header: "Due(GHS)",
       cell: ({ row }) => {
         const status = row.original.status
-        const payments = row.original.payments
+        const dueAmountFromStart = row.original.dueAmountFromStart
+        if (status === "active") {
+            return <span>{dueAmountFromStart}</span>
+        } else {
+            return <span className="text-muted-foreground italic">N/A</span>
+        }
+      }
+    },
+    {
+      accessorKey: "duration",
+      header: "Weeks",
+      cell: ({ row }) => {
+        const status = row.original.status
         const duration = row.original.duration
-        const start = row.original.start
 
         // Current week from start, with start week counting as week 1
-        const currentWeek = getWeeksFromStartDate(new Date(start))
+        const currentWeek = row.original.weeksFromStart
 
         if (status === "active") {
-            return <span>{payments?.length}/{currentWeek}/{duration}</span>
+            return <span>{currentWeek}/{duration}</span>
         } else {
             return <span className="text-muted-foreground italic">N/A</span>
         }
