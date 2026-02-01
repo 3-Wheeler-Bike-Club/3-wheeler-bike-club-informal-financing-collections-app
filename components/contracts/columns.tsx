@@ -161,7 +161,7 @@ export const columns: ColumnDef<ContractForTable>[] = [
                 </DropdownMenuContent>
               </DropdownMenu>
               <AddContractDriver open={openAddContractDriver} onOpenChange={setOpenAddContractDriver} contract={contract} />
-              <AddContractPayment open={openAddContractPayment} onOpenChange={setOpenAddContractPayment} />
+              <AddContractPayment open={openAddContractPayment} onOpenChange={setOpenAddContractPayment} contract={contract} />
             </>
           )
         },

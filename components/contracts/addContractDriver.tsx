@@ -28,37 +28,15 @@ import { FileUploader, FileUploaderContent, FileUploaderItem, FileInput
 
  } from "@/components/ui/file-upload"
 import { CloudUpload, Paperclip } from "lucide-react"
-import { shortenTxt } from "@/utils/shorten"
+import { formatNumberWithCommas, shortenTxt } from "@/utils/helpers"
 import { PhoneInput } from "@/components/ui/phone-input"
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { updateContractDriverPlusGuarantorAction } from "@/app/actions/contracts/updateContractDriverPlusGuarantorAction"
+import { calculateEndDate } from "@/utils/helpers"
 
-// Helper function to format number with commas
-const formatNumberWithCommas = (value: string): string => {
-  // Remove all non-numeric characters
-  const numericValue = value.replace(/\D/g, '')
-  if (!numericValue) return ''
-  // Format with commas
-  return parseInt(numericValue, 10).toLocaleString('en-US')
-}
 
-/**
-   * Calculates the end date given a start date and a number of weeks.
-   * @param {Date} startDate - The start date.
-   * @param {number} weeks - The number of weeks to add.
-   * @returns {Date} The calculated end date.
-   */
-function calculateEndDate(startDate: Date, weeks: number): Date {
-  // Defensive copy and ensure positive weeks
-  const result = new Date(startDate.getTime());
-  if (!Number.isFinite(weeks) || !startDate || isNaN(startDate.getTime())) {
-    throw new Error("Invalid arguments passed to calculateEndDate");
-  }
-  result.setDate(result.getDate() + weeks * 7);
-  return result;
-}
 
 const addContractDriverFormSchema = z.object({
   driverFirstName: z

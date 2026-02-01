@@ -27,15 +27,9 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSepa
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useState } from "react"
 import { postInventoryAction } from "@/app/actions/inventory/postInventoryAction"
+import { formatNumberWithCommas } from "@/utils/helpers"
 
-// Helper function to format number with commas
-const formatNumberWithCommas = (value: string): string => {
-  // Remove all non-numeric characters
-  const numericValue = value.replace(/\D/g, '')
-  if (!numericValue) return ''
-  // Format with commas
-  return parseInt(numericValue, 10).toLocaleString('en-US')
-}
+
 
 const addInventoryFormSchema = z.object({
   branch: z

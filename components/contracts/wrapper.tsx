@@ -11,7 +11,7 @@ import { DataTable } from "./dataTable";
 import { columns } from "./columns";
 import { useMemo } from "react";
 import type { Contract } from "@/hooks/useGetContracts";
-import { getWeeksFromStartDate } from "@/utils/shorten";
+import { getWeeksFromStartDate } from "@/utils/helpers";
 
 export interface ContractForTable {
     _id: string

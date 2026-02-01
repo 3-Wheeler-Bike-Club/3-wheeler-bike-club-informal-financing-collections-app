@@ -112,7 +112,7 @@ const ContractSchema = new mongoose.Schema(
                 },
                 method: {
                     type: String,
-                    enum: ["momo", "cash"],
+                    enum: ["mobile-money", "cash"],
                 },
                 reference: {
                     type: Date,
