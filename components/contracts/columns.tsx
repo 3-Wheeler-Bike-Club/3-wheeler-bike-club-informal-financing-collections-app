@@ -15,17 +15,23 @@ import { ContractForTable } from "@/components/contracts/wrapper";
 export const columns: ColumnDef<ContractForTable>[] = [
     {
         accessorKey: "branch",
-        header: "Branch",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">BRANCH</span>
+        ),
     },
     {
         accessorKey: "vehicle.type",
-        header: "Type",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">TYPE</span>
+        ),
     },
     {
-        accessorKey: "vehicle.license",
-        header: "License",
+        accessorKey: "vehicleLicense",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">LICENSE</span>
+        ),
         cell: ({ row }) => {
-            const license = row.original.vehicle?.license
+            const license = row.original.vehicleLicense
             const color = row.original.vehicle?.color
             return (
               <div>
@@ -37,15 +43,21 @@ export const columns: ColumnDef<ContractForTable>[] = [
     },
     {
         accessorKey: "owner.firstname",
-        header: "Owner Name",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide ">OWNER NAME</span>
+        ),
     },
     {
         accessorKey: "owner.phone",
-        header: "Owner Phone",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">OWNER PHONE</span>
+        ),
     },
     {
         accessorKey: "driver.firstname",
-        header: "Driver Name",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">DRIVER NAME</span>
+        ),
         cell: ({ row }) => {
             const status = row.original.status
             const driver = row.original.driver?.firstname
@@ -58,7 +70,9 @@ export const columns: ColumnDef<ContractForTable>[] = [
     },
     {
         accessorKey: "driver.phone",
-        header: "Driver Phone",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">DRIVER PHONE</span>
+        ),
         cell: ({ row }) => {
             const status = row.original.status
             const driver = row.original.driver?.phone
@@ -86,12 +100,14 @@ export const columns: ColumnDef<ContractForTable>[] = [
     */
     {
       accessorKey: "dueAmountFromStart",
-      header: "Due(GHS)",
+      header: () => (
+        <span className="font-bold text-primary tracking-wide">DUE(GHS)</span>
+      ),
       cell: ({ row }) => {
         const status = row.original.status
         const dueAmountFromStart = row.original.dueAmountFromStart
         if (status === "active") {
-            return <span>{dueAmountFromStart}</span>
+            return <span className={`font-bold ${dueAmountFromStart > 0 ? "text-red-500" : "text-green-500"}`}>{dueAmountFromStart}</span>
         } else {
             return <span className="text-muted-foreground italic">N/A</span>
         }
@@ -99,7 +115,9 @@ export const columns: ColumnDef<ContractForTable>[] = [
     },
     {
       accessorKey: "duration",
-      header: "Weeks",
+      header: () => (
+        <span className="font-bold text-primary tracking-wide">WEEKS</span>
+      ),
       cell: ({ row }) => {
         const status = row.original.status
         const duration = row.original.duration

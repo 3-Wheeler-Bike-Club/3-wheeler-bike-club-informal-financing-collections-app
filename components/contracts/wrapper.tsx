@@ -67,6 +67,7 @@ export interface ContractForTable {
     expectedAmountFromStart: number
     currentAmountFromStart: number
     dueAmountFromStart: number
+    vehicleLicense: string
 }
 
 export function Wrapper() {
@@ -74,20 +75,25 @@ export function Wrapper() {
 
     const contractsForTable = useMemo((): ContractForTable[] | null => {
         if (!contracts) return null
-        return contracts.map((contract: Contract) => {
+        // First, map the contracts and add calculated fields
+        const mapped = contracts.map((contract: Contract) => {
             const weeksFromStart = getWeeksFromStartDate(new Date(contract.start))
             const expectedAmountFromStart = contract.installment * weeksFromStart
             const currentAmountFromStart =
                 contract.payments?.reduce((sum, p) => sum + p.amount, 0) ?? 0
             const dueAmountFromStart = expectedAmountFromStart - currentAmountFromStart
+            const vehicleLicense = contract.vehicle?.license
             return {
                 ...contract,
                 weeksFromStart,
                 expectedAmountFromStart,
                 currentAmountFromStart,
                 dueAmountFromStart,
+                vehicleLicense,
             }
         })
+        // Then, sort descending by dueAmountFromStart
+        return mapped.sort((a, b) => b.dueAmountFromStart - a.dueAmountFromStart)
     }, [contracts])
 
     return (

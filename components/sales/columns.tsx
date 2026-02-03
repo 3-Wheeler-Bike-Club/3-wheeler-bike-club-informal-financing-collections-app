@@ -4,34 +4,50 @@ import { Sale } from "@/hooks/useGetSales";
 export const columns: ColumnDef<Sale>[] = [
     {
         accessorKey: "branch",
-        header: "Branch",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">BRANCH</span>
+        ),
     },
     {
         accessorKey: "vehicle.type",
-        header: "Type",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">TYPE</span>
+        ),
     },
     {
         accessorKey: "vehicle.model",
-        header: "Model",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">MODEL</span>
+        ),
     },
     {
         accessorKey: "customer.firstname",
-        header: "First Name",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">FIRST NAME</span>
+        ),
     },
     {   
         accessorKey: "customer.lastname",
-        header: "Last Name",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">LAST NAME</span>
+        ),
     },
     {
         accessorKey: "customer.phone",
-        header: "Phone",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">PHONE</span>
+        ),
     },
     {
         accessorKey: "amount",
-        header: "Amount",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">AMOUNT</span>
+        ),
     },
     {
         accessorKey: "createdAt",
-        header: "Created At",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">CREATED AT</span>
+        ),
     },
 ]
