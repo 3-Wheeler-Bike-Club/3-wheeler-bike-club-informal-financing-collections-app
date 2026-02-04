@@ -21,6 +21,10 @@ const InventorySchema = new mongoose.Schema(
                 type: String,
                 unique: true,
             },
+            engine: {
+                type: String,
+                unique: true,
+            }
         },
         amount: {
             type: Number,

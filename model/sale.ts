@@ -19,7 +19,12 @@ const SaleSchema = new mongoose.Schema(
             },
             vin: {
                 type: String,
+                unique: true,
             },
+            engine: {
+                type: String,
+                unique: true,
+            }
         },
         customer: {
             firstname: {

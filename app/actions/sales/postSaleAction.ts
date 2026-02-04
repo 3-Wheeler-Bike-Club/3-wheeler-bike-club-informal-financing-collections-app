@@ -7,6 +7,7 @@ export async function postSaleAction(
         model: string
         color: string
         vin: string
+        engine: string
     },
     customer: {
         firstname: string

@@ -4,15 +4,24 @@ import { Package, Plus, TriangleAlert } from "lucide-react";
 import { Menu } from "@/components/top/menu";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription, EmptyContent } from "@/components/ui/empty";
-import { useGetInventory } from "@/hooks/useGetInventory";
+import { Inventory, useGetInventory } from "@/hooks/useGetInventory";
 import { AddInventory } from "@/components/inventory/addInventory";
 import { columns } from "@/components/inventory/columns";
 import { DataTable } from "@/components/inventory/dataTable";
+import { useEffect, useState } from "react";
 
 export function Wrapper() {
 
     const { inventory, loading, error, getBackInventory } = useGetInventory()
+    const [inStockInventory, setInStockInventory] = useState<Inventory[]>([])
 
+    useEffect(() => {
+        if (inventory) {
+            const filteredInventory = inventory.filter((filteringInventory) => filteringInventory.status === "in stock")
+            setInStockInventory(filteredInventory)
+        }
+    }, [inventory])
+    console.log(inStockInventory)
     return (
         <div className="flex flex-col h-full p-4 md:p-6 lg:p-8 w-full gap-6">
                 <Menu/>
@@ -70,7 +79,7 @@ export function Wrapper() {
                                             <div className="flex justify-end">
                                                 <AddInventory getInventory={getBackInventory} />
                                             </div>
-                                            <DataTable columns={columns} data={inventory} />
+                                            <DataTable columns={columns} data={inStockInventory} />
                                         </div>
                                     </>
                                 )

@@ -9,6 +9,7 @@ export interface Sale {
         model: string
         color: string
         vin: string
+        engine: string
     }
     customer: {
         firstname: string

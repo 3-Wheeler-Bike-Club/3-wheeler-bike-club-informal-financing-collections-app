@@ -7,6 +7,7 @@ export async function postInventoryAction(
         model: string
         color: string
         vin: string
+        engine: string
     },
     amount: number,
 ) {

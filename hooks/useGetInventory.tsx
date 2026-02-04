@@ -8,7 +8,8 @@ export interface Inventory {
         type: "motorcycle" | "tricycle"
         model: string
         color: string
-        vin: string
+        vin: string 
+        engine: string
     }
     amount: number
     status: "in stock" | "out of stock"

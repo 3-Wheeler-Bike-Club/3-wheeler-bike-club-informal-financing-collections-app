@@ -47,6 +47,9 @@ const addInventoryFormSchema = z.object({
   vehicleVin: z
     .string()
     .min(1, "VIN is required"),
+  vehicleEngine: z
+    .string()
+    .min(1, "Engine is required"),
   amount: z
     .string()
     .min(1, "Amount is required"),
@@ -68,6 +71,7 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
       vehicleModel: "",
       vehicleColor: "",
       vehicleVin: "",
+      vehicleEngine: "",
       amount: "",
 
     },
@@ -85,6 +89,7 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
             model: value.vehicleModel,
             color: value.vehicleColor,
             vin: value.vehicleVin,
+            engine: value.vehicleEngine,
           },
           Number(value.amount),
         );
@@ -300,6 +305,39 @@ export function AddInventory({ getInventory }: AddInventoryProps) {
                                   }}
                                   aria-invalid={isInvalid}
                                   placeholder="MD6M14PA2R4NO1944"
+                                  autoComplete="off"
+                                  style={{ textTransform: 'uppercase' }}
+                                  disabled={isSubmitting}
+                                />
+                                {isInvalid && (
+                                  <FieldError errors={field.state.meta.errors} />
+                                )}
+                            </div>
+                          </Field>
+                        )
+                      }}
+                    />
+                    <addInventoryForm.Field
+                      name="vehicleEngine"
+                      children={(field) => {
+                        const isInvalid =
+                          field.state.meta.isTouched && !field.state.meta.isValid
+                        return (
+                          <Field data-invalid={isInvalid}>
+                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                            <FieldLabel htmlFor={field.name} className="text-primary">Engine</FieldLabel>
+                                <Input
+                                  id={field.name}
+                                  name={field.name}
+                                  value={field.state.value}
+                                  onBlur={field.handleBlur}
+                                  onChange={(e) => {
+                                    // Convert to uppercase and only allow alphanumeric characters
+                                    const uppercaseValue = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '')
+                                    field.handleChange(uppercaseValue)
+                                  }}
+                                  aria-invalid={isInvalid}
+                                  placeholder="AG125CC"
                                   autoComplete="off"
                                   style={{ textTransform: 'uppercase' }}
                                   disabled={isSubmitting}
