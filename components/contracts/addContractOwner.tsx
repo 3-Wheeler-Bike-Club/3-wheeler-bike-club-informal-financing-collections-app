@@ -101,7 +101,7 @@ export function AddContractOwner({ getContracts }: AddContractOwnerProps) {
           value.branch,
           value.serial,
           {
-            type: value.vehicleType as "motorcycle" | "tricycle",
+            type: value.vehicleType,
             model: value.vehicleModel,
             color: value.vehicleColor,
             vin: value.vehicleVin,

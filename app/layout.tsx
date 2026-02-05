@@ -11,7 +11,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "3 Wheeler Bike Club | Informal Financing collections",
+  title: "3 Wheeler Bike Club | Informal Financing Collections",
   description: "",
 };
 
