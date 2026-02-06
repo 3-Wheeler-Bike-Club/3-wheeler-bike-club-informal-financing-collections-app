@@ -152,3 +152,30 @@ export const MODELS = [
     }
 ]
 
+
+export const SEARCH_FILTERS = [
+    {
+        name: "Serial",
+        value: "serial",
+        column: "serial",
+        content: "filter by serial number...",
+    },
+    {
+        name: "Branch",
+        value: "branch",
+        column: "branch",
+        content: "filter by branch...",
+    },
+    {
+        name: "Type",
+        value: "type",
+        column: "vehicleType",
+        content: "filter by vehicle type...",
+    },
+    {
+        name: "License",
+        value: "license",   
+        column: "vehicleLicense",
+        content: "filter by license plate number...",
+    },
+]

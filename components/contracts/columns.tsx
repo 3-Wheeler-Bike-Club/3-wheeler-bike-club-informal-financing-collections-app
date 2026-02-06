@@ -20,10 +20,20 @@ export const columns: ColumnDef<ContractForTable>[] = [
         ),
     },
     {
-        accessorKey: "vehicle.type",
+        accessorKey: "serial",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">SERIAL</span>
+        ),
+    },
+    {
+        accessorKey: "vehicleType",
         header: () => (
             <span className="font-bold text-primary tracking-wide">TYPE</span>
         ),
+        cell: ({ row }) => {
+            const vehicleType = row.original.vehicleType
+            return <span>{vehicleType}</span>
+        }
     },
     {
         accessorKey: "vehicleLicense",
@@ -41,6 +51,7 @@ export const columns: ColumnDef<ContractForTable>[] = [
             )
         }
     },
+    /*
     {
         accessorKey: "owner.firstname",
         header: () => (
@@ -53,10 +64,11 @@ export const columns: ColumnDef<ContractForTable>[] = [
             <span className="font-bold text-primary tracking-wide">OWNER PHONE</span>
         ),
     },
+    */
     {
         accessorKey: "driver.firstname",
         header: () => (
-            <span className="font-bold text-primary tracking-wide">DRIVER NAME</span>
+            <span className="font-bold text-primary tracking-wide">NAME</span>
         ),
         cell: ({ row }) => {
             const status = row.original.status
@@ -71,7 +83,7 @@ export const columns: ColumnDef<ContractForTable>[] = [
     {
         accessorKey: "driver.phone",
         header: () => (
-            <span className="font-bold text-primary tracking-wide">DRIVER PHONE</span>
+            <span className="font-bold text-primary tracking-wide">PHONE</span>
         ),
         cell: ({ row }) => {
             const status = row.original.status

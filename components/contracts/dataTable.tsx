@@ -18,10 +18,12 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ListFilter } from "lucide-react"
 import { useState } from "react"
-import { Input } from "../ui/input"
-import { AddContractOwner } from "./addContractOwner"
+import { Input } from "@/components/ui/input"
+import { AddContractOwner } from "@/components/contracts/addContractOwner"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { SEARCH_FILTERS } from "@/utils/constants"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -35,6 +37,7 @@ export function DataTable<TData, TValue>({
     getContracts,
 }: DataTableProps<TData, TValue>) {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [searchFilter, setSearchFilter] = useState<string>("serial")
 
 
     const table = useReactTable({
@@ -52,13 +55,38 @@ export function DataTable<TData, TValue>({
     return (
         <div>
             <div className="flex items-center py-4 gap-4">
-                <Input
-                    placeholder="Filter License Plate Numbers..."
-                    value={(table.getColumn("vehicleLicense")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("vehicleLicense")?.setFilterValue(event.target.value)
-                    }
-                />
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="icon">
+                            <ListFilter className="text-primary" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start">
+                        <DropdownMenuGroup>
+                            <DropdownMenuLabel>Choose search filter</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            {SEARCH_FILTERS.map((filter) => (
+                                <DropdownMenuItem key={filter.value} onSelect={() => setSearchFilter(filter.value)}>
+                                    {filter.name}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
+                {(() => {
+                    const activeFilter = SEARCH_FILTERS.find((f) => f.value === searchFilter)
+                    if (!activeFilter) return null
+                    const column = table.getColumn(activeFilter.column)
+                    if (!column) return null
+                    return (
+                        <Input
+                            placeholder={activeFilter.content}
+                            value={(column.getFilterValue() as string) ?? ""}
+                            onChange={(event) => column.setFilterValue(event.target.value)}
+                        />
+                    )
+                })()}
                 <div className="flex justify-end">
                     <AddContractOwner getContracts={getContracts} />
                 </div>

@@ -68,6 +68,7 @@ export interface ContractForTable {
     expectedAmountFromStart: number
     currentAmountFromStart: number
     dueAmountFromStart: number
+    vehicleType: string
     vehicleLicense: string
 }
 
@@ -83,6 +84,7 @@ export function Wrapper() {
             const currentAmountFromStart =
                 contract.payments?.reduce((sum, p) => sum + p.amount, 0) ?? 0
             const dueAmountFromStart = expectedAmountFromStart - currentAmountFromStart
+            const vehicleType = contract.vehicle?.type
             const vehicleLicense = contract.vehicle?.license
             return {
                 ...contract,
@@ -90,6 +92,7 @@ export function Wrapper() {
                 expectedAmountFromStart,
                 currentAmountFromStart,
                 dueAmountFromStart,
+                vehicleType,
                 vehicleLicense,
             }
         })
