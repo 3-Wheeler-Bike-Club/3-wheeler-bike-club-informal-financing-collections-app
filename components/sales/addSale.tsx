@@ -21,7 +21,7 @@ import {
   FieldDescription,
 } from "@/components/ui/field"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Caravan, CirclePile, Loader2, Motorbike, Plus } from "lucide-react"
+import { CirclePile, Loader2, ChevronLeft, ChevronRight, Plus } from "lucide-react"
 import { useForm } from "@tanstack/react-form"
 import { Inventory } from "@/hooks/useGetInventory"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -118,7 +118,7 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
   }, [inventoryByVehicleType])
 
   const [isSubmitting, setIsSubmitting] = useState(false)
-
+  const [step, setStep] = useState(1)
 
   const addSaleForm = useForm({
     defaultValues: {
@@ -202,8 +202,32 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
           <div className="mx-auto w-full max-w-sm pb-6">
           <DialogHeader>
             <DialogTitle>Add Sales</DialogTitle>
-            <DialogDescription className="mb-4">
-                Record a new sale transaction of a vehicle sold.
+            <DialogDescription className="flex flex-row items-center justify-between mb-4">
+              <div className="flex flex-col gap-2">
+                {step === 1 && "Step 1/2: Vehicle Selection"}
+                {step === 2 && "Step 2/2: Customer Details"}
+                <div className="flex items-center gap-2">
+                  <span className={`h-2 w-12 rounded-full transition-colors ${step === 1 ? 'bg-primary' : 'bg-primary/50'}`} />
+                  <span className={`h-2 w-12 rounded-full transition-colors ${step === 2 ? 'bg-primary' : 'bg-gray-300'}`} />
+                </div>
+              </div>
+              <div className="flex flex-row items-center gap-1">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setStep(step - 1)}
+                  disabled={step === 1 || isSubmitting}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => setStep(step + 1)}
+                  disabled={step === 2 || isSubmitting}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
             </DialogDescription>
           </DialogHeader>
             <div className="flex flex-col p-4 no-scrollbar -mx-4 h-[50vh] overflow-y-auto">
@@ -216,6 +240,8 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
                   }}
                 >
                   <FieldGroup>
+                    {step === 1 && (
+                      <>
                     <addSaleForm.Field
                       name="branch"
                       children={(field) => {
@@ -358,6 +384,10 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
                         )
                       }}
                     />
+                      </>
+                    )}
+                    {step === 2 && (
+                      <>
                     <addSaleForm.Field
                       name="customerFirstName"
                       children={(field) => {
@@ -485,6 +515,8 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
                         )
                       }}
                     />
+                      </>
+                    )}
                   </FieldGroup>
                 </form>  
             </div>
@@ -496,6 +528,7 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
                 variant="outline" 
                 onClick={() => {
                     addSaleForm.reset()
+                    setStep(1)
                     setInventoryByVehicleTypeForCombobox([])
                     setInventoryByVehicleType([])
                     setInventoryByBranch([])
@@ -504,7 +537,7 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
               >
                 Reset
               </Button>
-              <Button type="submit" form="add-sale-form" disabled={isSubmitting}>
+              <Button type="submit" form="add-sale-form" disabled={step !== 2 || isSubmitting}>
                 {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <CirclePile className="h-4 w-4" />}
                 Submit
               </Button>
