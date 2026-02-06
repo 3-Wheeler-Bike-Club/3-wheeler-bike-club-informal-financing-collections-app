@@ -40,7 +40,7 @@ import {
   ItemTitle,
 } from "@/components/ui/item"
 import { PhoneInput } from "../ui/phone-input"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { postSaleAction } from "@/app/actions/sales/postSaleAction"
 import { toast } from "sonner"
 import { updateInventoryAction } from "@/app/actions/inventory/updateInventoryAction"
@@ -119,6 +119,7 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [step, setStep] = useState(1)
+  const dialogContentRef = useRef<HTMLDivElement>(null)
 
   const addSaleForm = useForm({
     defaultValues: {
@@ -230,7 +231,7 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
               </div>
             </DialogDescription>
           </DialogHeader>
-            <div className="flex flex-col p-4 no-scrollbar -mx-4 h-[50vh] overflow-y-auto">
+            <div ref={dialogContentRef} className="flex flex-col p-4 no-scrollbar -mx-4 h-[50vh] overflow-y-auto">
                 <form
                   className="space-y-6"
                   id="add-sale-form"
@@ -350,7 +351,7 @@ export function AddSale({ inventory, getSales }: AddSaleProps) {
                               disabled={isSubmitting}
                             >
                               <ComboboxInput placeholder="Search vehicles..." />
-                              <ComboboxContent>
+                              <ComboboxContent container={dialogContentRef}>
                                 <ComboboxEmpty>No vehicles found.</ComboboxEmpty>
                                 <ComboboxList>
                                   {(inventoryByVehicleTypeForCombobox) => (

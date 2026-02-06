@@ -31,7 +31,7 @@ export function Wrapper() {
                         <div className="w-full max-w-[66rem]">
                             <Alert>
                                 <Package className="h-4 w-4" />
-                                <AlertTitle className="font-bold text-yellow-600">
+                                <AlertTitle className="font-bold text-primary">
                                    Inventory
                                 </AlertTitle>
                                 <AlertDescription className="text-xs italic">
@@ -58,7 +58,7 @@ export function Wrapper() {
                                         <Empty className="bg-muted/30 h-full flex items-center justify-center">
                                             <EmptyHeader>
                                                 <EmptyMedia variant="icon">
-                                                    <TriangleAlert className="h-4 w-4 text-yellow-600" />
+                                                    <TriangleAlert className="h-4 w-4 text-primary" />
                                                 </EmptyMedia>
                                                 <EmptyTitle>No Vehicles in Stock</EmptyTitle>
                                                 <EmptyDescription className="max-w-xs text-pretty">
