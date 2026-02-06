@@ -218,7 +218,7 @@ export function AddContractOwner({ getContracts }: AddContractOwnerProps) {
                                     field.handleChange(uppercaseValue)
                                   }}
                                   aria-invalid={isInvalid}
-                                  placeholder="PKS 10"
+                                  placeholder="PKS10"
                                   autoComplete="off"
                                   style={{ textTransform: 'uppercase' }}
                                   disabled={isSubmitting}
@@ -396,7 +396,7 @@ export function AddContractOwner({ getContracts }: AddContractOwnerProps) {
                                     field.handleChange(uppercaseValue)
                                   }}
                                   aria-invalid={isInvalid}
-                                  placeholder="GH-1234567890"
+                                  placeholder="M-25-1515"
                                   autoComplete="off"
                                   style={{ textTransform: 'uppercase' }}
                                   disabled={isSubmitting}

@@ -37,15 +37,9 @@ export const columns: ColumnDef<Sale>[] = [
         }
     },
     {
-        accessorKey: "vehicle.engine",
-        header: () => (
-            <span className="font-bold text-primary tracking-wide">ENGINE</span>
-        ),
-    },
-    {
         accessorKey: "customer.firstname",
         header: () => (
-            <span className="font-bold text-primary tracking-wide">FIRST NAME</span>
+            <span className="font-bold text-primary tracking-wide">NAME</span>
         ),
     },
     {
