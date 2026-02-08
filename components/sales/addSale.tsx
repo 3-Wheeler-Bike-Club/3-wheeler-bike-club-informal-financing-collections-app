@@ -68,6 +68,7 @@ const addSaleFormSchema = z.object({
   customerPhone: z
     .string()
     .min(10, "Phone number must be at least 10 digits"),
+  status: z.enum(["paid in full", "paid in installments"]),
 })
 
 export interface AddSaleProps {
@@ -130,7 +131,7 @@ export function AddSale({ motor, getSales }: AddSaleProps) {
       customerOtherName: "",
       customerLastName: "",
       customerPhone: "",
-
+      status: "paid in full" as "paid in full" | "paid in installments",
     },
     validators: {
       onSubmit: addSaleFormSchema,
@@ -156,7 +157,8 @@ export function AddSale({ motor, getSales }: AddSaleProps) {
               lastname: value.customerLastName,
               phone: value.customerPhone,
             },
-            Number(sale?.amount),
+            Number(sale?.msrp),
+            value.status,
           )
           if (postSale) {
             const updateMotor = await updateMotorAction(sale?._id)
@@ -511,6 +513,36 @@ export function AddSale({ motor, getSales }: AddSaleProps) {
                                 {isInvalid && (
                                   <FieldError errors={field.state.meta.errors} />
                                 )}
+                            </div>
+                          </Field>
+                        )
+                      }}
+                    />
+                    <addSaleForm.Field
+                      name="status"
+                      children={(field) => {
+                        const isInvalid =
+                          field.state.meta.isTouched && !field.state.meta.isValid
+                        return (
+                          <Field data-invalid={isInvalid}>
+                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                              <FieldLabel htmlFor={field.name} className="text-primary">Payment Status</FieldLabel>
+                              <Select
+                                value={field.state.value}
+                                onValueChange={(v) => field.handleChange(v as "paid in full" | "paid in installments")}
+                                disabled={isSubmitting}
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Select status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="paid in full">Paid in full</SelectItem>
+                                  <SelectItem value="paid in installments">Paid in installments</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              {isInvalid && (
+                                <FieldError errors={field.state.meta.errors} />
+                              )}
                             </div>
                           </Field>
                         )

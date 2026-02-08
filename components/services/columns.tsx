@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Motor } from "@/hooks/useGetMotors";
+import { Service } from "@/hooks/useGetServices";
 
-export const columns: ColumnDef<Motor>[] = [
+export const columns: ColumnDef<Service>[] = [
     {
         accessorKey: "branch",
         header: () => (
@@ -9,55 +9,45 @@ export const columns: ColumnDef<Motor>[] = [
         ),
     },
     {
-        accessorKey: "vehicle.type",
+        accessorKey: "part.type",
         header: () => (
             <span className="font-bold text-primary tracking-wide">TYPE</span>
         ),
     },
     {
-        accessorKey: "vehicle.model",
+        accessorKey: "part.model",
         header: () => (
             <span className="font-bold text-primary tracking-wide">MODEL</span>
         ),
     },
     {
-        accessorKey: "vehicle.vin",
+        accessorKey: "part.serial",
         header: () => (
-            <span className="font-bold text-primary tracking-wide">VIN</span>
-        ),
-        cell: ({ row }) => {
-            const vin = row.original.vehicle?.vin
-            const color = row.original.vehicle?.color
-            return (
-                <div>
-                    <span style={{ backgroundColor: color, display: 'inline-block' }} className="w-2 h-2 rounded-full mr-2"></span>
-                    <span>{vin}</span>
-                </div>
-            )
-        }
-    },
-    {
-        accessorKey: "vehicle.engine",
-        header: () => (
-            <span className="font-bold text-primary tracking-wide">ENGINE</span>
+            <span className="font-bold text-primary tracking-wide">SERIAL</span>
         ),
     },
     {
-        accessorKey: "cost",
+        accessorKey: "customer.firstname",
         header: () => (
-            <span className="font-bold text-primary tracking-wide">COST</span>
+            <span className="font-bold text-primary tracking-wide">NAME</span>
         ),
     },
     {
-        accessorKey: "msrp",
+        accessorKey: "customer.phone",
         header: () => (
-            <span className="font-bold text-primary tracking-wide">MSRP</span>
+            <span className="font-bold text-primary tracking-wide">PHONE</span>
         ),
     },
     {
-        accessorKey: "waybill",
+        accessorKey: "amount",
         header: () => (
-            <span className="font-bold text-primary tracking-wide">WAYBILL</span>
+            <span className="font-bold text-primary tracking-wide">AMOUNT</span>
+        ),
+    },
+    {
+        accessorKey: "status",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">STATUS</span>
         ),
     },
     {
@@ -76,7 +66,7 @@ export const columns: ColumnDef<Motor>[] = [
                 const minute = pad(date.getMinutes())
                 const ampm = hour >= 12 ? 'PM' : 'AM'
                 hour = hour % 12
-                hour = hour ? hour : 12 // the hour '0' should be '12'
+                hour = hour ? hour : 12
                 return `${year}-${month}-${day} ${hour}:${minute}${ampm}`
             }
 

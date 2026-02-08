@@ -10,14 +10,16 @@ export async function POST(
         return authResponse
     }
 
-    const { branch, vehicle, amount } = await req.json()
+    const { branch, vehicle, cost, msrp, waybill } = await req.json()
 
     try {
         await connectDB()
-        const motor = await Motor.create({ 
+        const motor = await Motor.create({
             branch: branch,
             vehicle: vehicle,
-            amount: amount,
+            cost: cost,
+            msrp: msrp,
+            waybill: waybill,
             status: "in stock",
         })
         return new Response(JSON.stringify(motor))

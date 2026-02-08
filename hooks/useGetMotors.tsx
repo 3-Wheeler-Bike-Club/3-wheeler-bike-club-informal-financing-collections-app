@@ -8,10 +8,12 @@ export interface Motor {
         type: string
         model: string
         color: string
-        vin: string 
+        vin: string
         engine: string
     }
-    amount: number
+    cost: number
+    msrp: number
+    waybill: string
     status: string
     createdAt: Date
     updatedAt: Date

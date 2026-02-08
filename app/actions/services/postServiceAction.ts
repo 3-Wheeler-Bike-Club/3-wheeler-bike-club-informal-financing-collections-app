@@ -1,13 +1,12 @@
 "use server"
 
-export async function postSaleAction(
+export async function postServiceAction(
     branch: string,
-    vehicle: {
+    part: {
         type: string
         model: string
-        color: string
-        vin: string
-        engine: string
+        no: string
+        serial: string
     },
     customer: {
         firstname: string
@@ -19,7 +18,7 @@ export async function postSaleAction(
     status: "paid in full" | "paid in installments",
 ) {
     try {
-        const response = await fetch(`${process.env.BASE_URL}/api/sales/postSale`, {
+        const response = await fetch(`${process.env.BASE_URL}/api/services/postService`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -27,17 +26,17 @@ export async function postSaleAction(
             },
             body: JSON.stringify({
                 branch: branch,
-                vehicle: vehicle,
+                part: part,
                 customer: customer,
                 amount: amount,
                 status: status,
             })
         })
         if (!response.ok) {
-            throw new Error("Failed to post sale")
+            throw new Error("Failed to post service")
         }
         return response.json()
-    } catch (error) { 
+    } catch (error) {
         console.log(error)
     }
 }

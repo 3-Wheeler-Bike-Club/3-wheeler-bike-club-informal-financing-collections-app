@@ -9,7 +9,9 @@ export async function postMotorAction(
         vin: string
         engine: string
     },
-    amount: number,
+    cost: number,
+    msrp: number,
+    waybill: string,
 ) {
     try {
         const response = await fetch(`${process.env.BASE_URL}/api/motors/postMotor`, {
@@ -18,10 +20,12 @@ export async function postMotorAction(
                 "Content-Type": "application/json",
                 "x-api-key": process.env.THREEWB_API_KEY
             },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 branch: branch,
                 vehicle: vehicle,
-                amount: amount,
+                cost: cost,
+                msrp: msrp,
+                waybill: waybill,
             })
         })
         if (!response.ok) {

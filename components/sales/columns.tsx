@@ -55,6 +55,12 @@ export const columns: ColumnDef<Sale>[] = [
         ),
     },
     {
+        accessorKey: "status",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">STATUS</span>
+        ),
+    },
+    {
         accessorKey: "createdAt",
         header: () => (
             <span className="font-bold text-primary tracking-wide">CREATED AT</span>

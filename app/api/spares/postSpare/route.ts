@@ -10,14 +10,16 @@ export async function POST(
         return authResponse
     }
 
-    const { branch, part, amount } = await req.json()
+    const { branch, part, cost, msrp, waybill } = await req.json()
 
     try {
         await connectDB()
         const spare = await Spare.create({
             branch: branch,
             part: part,
-            amount: amount,
+            cost: cost,
+            msrp: msrp,
+            waybill: waybill,
             status: "in stock",
         })
         return new Response(JSON.stringify(spare))

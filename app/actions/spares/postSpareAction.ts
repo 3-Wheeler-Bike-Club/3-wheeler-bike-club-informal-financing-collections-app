@@ -8,7 +8,9 @@ export async function postSpareAction(
         no: string
         serial: string
     },
-    amount: number,
+    cost: number,
+    msrp: number,
+    waybill: string,
 ) {
     try {
         const response = await fetch(`${process.env.BASE_URL}/api/spares/postSpare`, {
@@ -20,7 +22,9 @@ export async function postSpareAction(
             body: JSON.stringify({
                 branch: branch,
                 part: part,
-                amount: amount,
+                cost: cost,
+                msrp: msrp,
+                waybill: waybill,
             })
         })
         if (!response.ok) {

@@ -1,15 +1,14 @@
-import { getSalesAction } from "@/app/actions/sales/getSalesAction"
+import { getServicesAction } from "@/app/actions/services/getServicesAction"
 import { useState, useEffect } from "react"
 
-export interface Sale {
+export interface Service {
     _id: string
     branch: string
-    vehicle: {
+    part: {
         type: string
         model: string
-        color: string
-        vin: string
-        engine: string
+        no: string
+        serial: string
     }
     customer: {
         firstname: string
@@ -23,35 +22,35 @@ export interface Sale {
     updatedAt: Date
 }
 
-export const useGetSales = () => {
-    const [sales, setSales] = useState<Sale[] | null>(null)
+export const useGetServices = () => {
+    const [services, setServices] = useState<Service[] | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<any | null>(null)
 
     useEffect(() => {
-        async function getSales() {
+        async function getServices() {
             setLoading(true)
             try {
-                const data = await getSalesAction()
-                setSales(data)
+                const data = await getServicesAction()
+                setServices(data)
             } catch (err) {
                 setError(err)
             }
             setLoading(false)
         }
-        getSales()
+        getServices()
     }, [])
 
-    async function getBackSales() {
+    async function getBackServices() {
         setLoading(true)
         try {
-            const data = await getSalesAction()
-            setSales(data)
+            const data = await getServicesAction()
+            setServices(data)
         } catch (err) {
             setError(err)
         }
         setLoading(false)
     }
 
-    return { sales, loading, error, getBackSales }
+    return { services, loading, error, getBackServices }
 }

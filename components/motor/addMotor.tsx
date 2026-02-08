@@ -51,9 +51,9 @@ const addMotorFormSchema = z.object({
   vehicleEngine: z
     .string()
     .min(1, "Engine is required"),
-  amount: z
-    .string()
-    .min(1, "Amount is required"),
+  cost: z.string().min(1, "Cost is required"),
+  msrp: z.string().min(1, "MSRP is required"),
+  waybill: z.string().min(1, "Waybill is required"),
 })
 
 export interface AddMotorProps {
@@ -73,8 +73,9 @@ export function AddMotor({ getMotors }: AddMotorProps) {
       vehicleColor: "",
       vehicleVin: "",
       vehicleEngine: "",
-      amount: "",
-
+      cost: "",
+      msrp: "",
+      waybill: "",
     },
     validators: {
       onSubmit: addMotorFormSchema,
@@ -92,7 +93,9 @@ export function AddMotor({ getMotors }: AddMotorProps) {
             vin: value.vehicleVin,
             engine: value.vehicleEngine,
           },
-          Number(value.amount),
+          Number(value.cost),
+          Number(value.msrp),
+          value.waybill,
         );
         if (postMotor) {
           toast.success("Vehicle Stock Added to Inventory", {
@@ -353,35 +356,88 @@ export function AddMotor({ getMotors }: AddMotorProps) {
                       }}
                     />
                     <addMotorForm.Field
-                      name="amount"
+                      name="cost"
                       children={(field) => {
                         const isInvalid =
                           field.state.meta.isTouched && !field.state.meta.isValid
                         return (
                           <Field data-invalid={isInvalid}>
                             <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                            <FieldLabel htmlFor={field.name} className="text-primary">Amount(GHS)</FieldLabel>
-                                <Input
-                                  id={field.name}
-                                  name={field.name}
-                                  value={field.state.value ? formatNumberWithCommas(field.state.value) : ''}
-                                  onBlur={field.handleBlur}
-                                  onChange={(e) => {
-                                    // Remove all non-numeric characters
-                                    const rawValue = e.target.value.replace(/\D/g, '')
-                                    // Store raw numeric value (without commas) in form state
-                                    field.handleChange(rawValue)
-                                  }}
-                                  aria-invalid={isInvalid}
-                                  placeholder="40,000"
-                                  autoComplete="off"
-                                  type="text"
-                                  inputMode="numeric"
-                                  disabled={isSubmitting}
-                                />
-                                {isInvalid && (
-                                  <FieldError errors={field.state.meta.errors} />
-                                )}
+                              <FieldLabel htmlFor={field.name} className="text-primary">Cost (GHS)</FieldLabel>
+                              <Input
+                                id={field.name}
+                                name={field.name}
+                                value={field.state.value ? formatNumberWithCommas(field.state.value) : ""}
+                                onBlur={field.handleBlur}
+                                onChange={(e) => field.handleChange(e.target.value.replace(/\D/g, ""))}
+                                aria-invalid={isInvalid}
+                                placeholder="35,000"
+                                autoComplete="off"
+                                type="text"
+                                inputMode="numeric"
+                                disabled={isSubmitting}
+                              />
+                              {isInvalid && (
+                                <FieldError errors={field.state.meta.errors} />
+                              )}
+                            </div>
+                          </Field>
+                        )
+                      }}
+                    />
+                    <addMotorForm.Field
+                      name="msrp"
+                      children={(field) => {
+                        const isInvalid =
+                          field.state.meta.isTouched && !field.state.meta.isValid
+                        return (
+                          <Field data-invalid={isInvalid}>
+                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                              <FieldLabel htmlFor={field.name} className="text-primary">MSRP (GHS)</FieldLabel>
+                              <Input
+                                id={field.name}
+                                name={field.name}
+                                value={field.state.value ? formatNumberWithCommas(field.state.value) : ""}
+                                onBlur={field.handleBlur}
+                                onChange={(e) => field.handleChange(e.target.value.replace(/\D/g, ""))}
+                                aria-invalid={isInvalid}
+                                placeholder="40,000"
+                                autoComplete="off"
+                                type="text"
+                                inputMode="numeric"
+                                disabled={isSubmitting}
+                              />
+                              {isInvalid && (
+                                <FieldError errors={field.state.meta.errors} />
+                              )}
+                            </div>
+                          </Field>
+                        )
+                      }}
+                    />
+                    <addMotorForm.Field
+                      name="waybill"
+                      children={(field) => {
+                        const isInvalid =
+                          field.state.meta.isTouched && !field.state.meta.isValid
+                        return (
+                          <Field data-invalid={isInvalid}>
+                            <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
+                              <FieldLabel htmlFor={field.name} className="text-primary">Waybill</FieldLabel>
+                              <Input
+                                id={field.name}
+                                name={field.name}
+                                value={field.state.value}
+                                onBlur={field.handleBlur}
+                                onChange={(e) => field.handleChange(e.target.value)}
+                                aria-invalid={isInvalid}
+                                placeholder="Waybill reference"
+                                autoComplete="off"
+                                disabled={isSubmitting}
+                              />
+                              {isInvalid && (
+                                <FieldError errors={field.state.meta.errors} />
+                              )}
                             </div>
                           </Field>
                         )
