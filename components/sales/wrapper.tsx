@@ -23,7 +23,7 @@ export function Wrapper() {
 
             <div className="flex flex-col w-full gap-6">
                 <div className="flex w-full justify-center">
-                    <div className="w-full max-w-[66rem]">
+                    <div className="w-full max-w-[90rem]">
                         <Alert>
                             <ShoppingCart className="h-4 w-4" />
                             <AlertTitle className="font-bold text-primary">
@@ -38,7 +38,7 @@ export function Wrapper() {
             </div>
 
             <div className="flex w-full h-full justify-center">
-                <div className="flex w-full h-full max-w-[66rem]">
+                <div className="flex w-full h-full max-w-[90rem]">
                     {
                         salesLoading && (
                             <>

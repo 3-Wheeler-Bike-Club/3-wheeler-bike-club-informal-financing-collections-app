@@ -65,7 +65,7 @@ export function Wrapper() {
                 
                 <div className="flex flex-col w-full gap-6">
                     <div className="flex w-full justify-center">
-                        <div className="w-full max-w-[66rem]">
+                        <div className="w-full max-w-[90rem]">
                             <Alert>
                                 <DoorOpen className="h-4 w-4" />
                                 <AlertTitle className="font-bold">
@@ -79,7 +79,7 @@ export function Wrapper() {
                     </div>
 
                     <div className="flex w-full justify-center py-4 md:py-8 min-h-0 md:h-[70vh]">
-                        <div className="w-full max-w-[66rem] h-full md:h-full">
+                        <div className="w-full max-w-[90rem] h-full md:h-full">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8 w-full h-auto md:h-[75%]">
                                 {menuItems.map((item) => {
                                     const Icon = item.icon;

@@ -179,3 +179,5 @@ export const SEARCH_FILTERS = [
         content: "filter by license plate number...",
     },
 ]
+
+export const PARTS = []
