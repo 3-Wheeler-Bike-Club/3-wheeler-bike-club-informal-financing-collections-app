@@ -13,8 +13,8 @@ export const BRANCHES = [
         value: "escobar-kasoa",
     },
     {
-        name: "Buduburam Liberia Camp",
-        value: "buduburam-liberia-camp",
+        name: "Budumburam Liberia Camp",
+        value: "budumburam-liberia-camp",
     },
     {
         name: "Dwenase Sefwi Wiawso",
@@ -180,4 +180,126 @@ export const SEARCH_FILTERS = [
     },
 ]
 
-export const PARTS = []
+export const PARTS = [
+    {
+        type: "",
+        description: "2..75-17 41P 4PR ATT525 TUBELESS - 40114010",
+        no: "TVS TYRE 2.75-17 41P",
+        cost: 320 
+    },
+    {
+        type: "",
+        description: "55P ATT1085M TT",
+        no: "TVS TYRE 100/90-17",
+        cost: 391 
+    },
+    {
+        type: "",
+        description: "BRAKE SHOE SET 130 DIA/28MM WIDTH - NEW",
+        no: "K6320590",
+        cost: 45 
+    },
+    {
+        type: "",
+        description: "CABLE THROTTLE PHOENIX",
+        no: "G4320690",
+        cost: 34 
+    },
+    {
+        type: "",
+        description: "CAMCHAIN (SILENT CHAIN) THROTTLE PHOENIX",
+        no: "G4320690",
+        cost: 34 
+    },
+    
+    {
+        type: "",
+        description: "CABLE THROTTLE PHOENIX",
+        no: "G4320690",
+        cost: 34 
+    },
+    {
+        type: "",
+        description: "CABLE THROTTLE PHOENIX",
+        no: "G4320690",
+        cost: 34 
+    },
+    {
+        type: "",
+        description: "CABLE THROTTLE PHOENIX",
+        no: "G4320690",
+        cost: 34 
+    },
+    {
+        type: "",
+        description: "CABLE THROTTLE PHOENIX",
+        no: "G4320690",
+        cost: 34 
+    },
+    {
+        type: "",
+        description: "CABLE THROTTLE PHOENIX",
+        no: "G4320690",
+        cost: 34 
+    },
+    {
+        type: "",
+        description: "CABLE THROTTLE PHOENIX",
+        no: "G4320690",
+        cost: 34 
+    },
+    {
+        type: "",
+        description: "CABLE THROTTLE PHOENIX",
+        no: "G4320690",
+        cost: 34 
+    },
+    {
+        type: "",
+        description: "CABLE THROTTLE PHOENIX",
+        no: "G4320690",
+        cost: 34 
+    },
+    {
+        type: "",
+        description: "CABLE THROTTLE PHOENIX",
+        no: "G4320690",
+        cost: 34 
+    },
+    {
+        type: "",
+        description: "CABLE THROTTLE PHOENIX",
+        no: "G4320690",
+        cost: 34 
+    },
+    {
+        type: "",
+        description: "CABLE THROTTLE PHOENIX",
+        no: "G4320690",
+        cost: 34 
+    },
+    {
+        type: "",
+        description: "CABLE THROTTLE PHOENIX",
+        no: "G4320690",
+        cost: 34 
+    },
+    {
+        type: "",
+        description: "PIVOT PIN FRONT KIT",
+        no: "G5320470",
+        cost: 80 
+    },
+    {
+        type: "",
+        description: "SET PLATE CLUTCH",
+        no: "G4320690",
+        cost: 70 
+    },
+    {
+        type: "",
+        description: "SLIDER BLOCK KIT",
+        no: "G2320570",
+        cost: 26 
+    },
+]

@@ -1,21 +1,21 @@
 "use client";
 
-import { Package, Plus, TriangleAlert } from "lucide-react";
+import { Package, TriangleAlert } from "lucide-react";
 import { Menu } from "@/components/top/menu";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription, EmptyContent } from "@/components/ui/empty";
 import { Spare, useGetSpares } from "@/hooks/useGetSpares";
-import { AddSpare } from "@/components/spare/addSpare";
 import { columns } from "@/components/spare/columns";
 import { DataTable } from "@/components/motor/dataTable";
 import { useEffect, useState } from "react";
+import { AddSpare } from "./addSpare";
 
 export function Wrapper() {
 
     const { spares, loading, error, getBackSpares } = useGetSpares()
     const [inStockSpares, setInStockSpares] = useState<Spare[]>([])
 
-    useEffect(() => {
+    useEffect(() => {   
         if (spares) {
             const filteredSpares = spares.filter((s) => s.status === "in stock")
             setInStockSpares(filteredSpares)

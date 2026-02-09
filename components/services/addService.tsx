@@ -64,7 +64,7 @@ export interface AddServiceProps {
 }
 
 interface SpareForCombobox {
-  model: string
+  description: string
   serial: string
   value: string
 }
@@ -88,7 +88,7 @@ export function AddService({ spares, getServices, getSpares }: AddServiceProps) 
   useEffect(() => {
     if (sparesByPartType && sparesByPartType.length > 0) {
       const formatted = sparesByPartType.map((item) => ({
-        model: item.part.model,
+        description: item.part.description ?? item.part.serial,
         serial: item.part.serial,
         value: item.part.serial,
       }))
@@ -126,7 +126,7 @@ export function AddService({ spares, getServices, getSpares }: AddServiceProps) 
             value.branch,
             {
               type: selectedSpare.part.type,
-              model: selectedSpare.part.model,
+              model: selectedSpare.part.description ?? selectedSpare.part.serial,
               no: selectedSpare.part.no,
               serial: selectedSpare.part.serial,
             },
@@ -336,7 +336,7 @@ export function AddService({ spares, getServices, getSpares }: AddServiceProps) 
                                         <ComboboxItem key={item.value} value={item}>
                                           <Item size="sm" className="p-0">
                                             <ItemContent>
-                                              <ItemTitle className="whitespace-nowrap">{item.model}</ItemTitle>
+                                              <ItemTitle className="whitespace-nowrap">{item.description}</ItemTitle>
                                               <ItemDescription>{item.serial}</ItemDescription>
                                             </ItemContent>
                                           </Item>

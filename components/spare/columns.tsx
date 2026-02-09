@@ -15,9 +15,33 @@ export const columns: ColumnDef<Spare>[] = [
         ),
     },
     {
-        accessorKey: "part.model",
+        accessorKey: "part.description",
         header: () => (
-            <span className="font-bold text-primary tracking-wide">MODEL</span>
+            <span className="font-bold text-primary tracking-wide">DESCRIPTION</span>
+        ),
+    },
+    {
+        accessorKey: "part.date",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">DATE</span>
+        ),
+    },
+    {
+        accessorKey: "part.batch",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">BATCH</span>
+        ),
+    },
+    {
+        accessorKey: "part.code",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">CODE</span>
+        ),
+    },
+    {
+        accessorKey: "part.t",
+        header: () => (
+            <span className="font-bold text-primary tracking-wide">T</span>
         ),
     },
     {

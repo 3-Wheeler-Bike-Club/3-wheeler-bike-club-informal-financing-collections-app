@@ -11,15 +11,30 @@ const SpareSchema = new mongoose.Schema(
                 type: String,
                 enum: ["motorcycle", "scooter", "semi-auto", "tricycle"],
             },
-            model: {
+            no: {
                 type: String,
             },
-            no: {
+            description: {
+                type: String,
+            },
+            date: {
+                type: String,
+            },
+            batch: {
+                type: String,
+            },
+            d: {
+                type: String,
+            },
+            code: {
+                type: String,
+            },
+            t: {
                 type: String,
             },
             serial: {
                 type: String,
-            },
+            }, 
         },              
         cost: {
             type: Number,

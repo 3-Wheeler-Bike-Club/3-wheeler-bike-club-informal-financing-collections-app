@@ -6,8 +6,13 @@ export interface Spare {
     branch: string
     part: {
         type: string
-        model: string
         no: string
+        description?: string
+        date?: string
+        batch?: string
+        d?: string
+        code?: string
+        t?: string
         serial: string
     }
     cost: number
