@@ -1,6 +1,7 @@
 import { getSparesAction } from "@/app/actions/spares/getSparesAction"
 import { useState, useEffect } from "react"
 
+// Matches SpareSchema in model/spare.ts
 export interface Spare {
     _id: string
     branch: string
@@ -8,17 +9,11 @@ export interface Spare {
         type: string
         no: string
         description?: string
-        date?: string
-        batch?: string
-        d?: string
-        code?: string
-        t?: string
-        serial: string
     }
+    quantity: number
     cost: number
     msrp: number
-    waybill: string
-    status: string
+    waybill: string[]
     createdAt: Date
     updatedAt: Date
 }

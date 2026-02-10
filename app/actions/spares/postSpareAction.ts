@@ -1,16 +1,17 @@
 "use server"
 
+// Matches SpareSchema: branch, part, quantity, cost, msrp, waybill
 export async function postSpareAction(
     branch: string,
     part: {
         type: string
-        model: string
         no: string
-        serial: string
+        description?: string
     },
+    quantity: number,
     cost: number,
     msrp: number,
-    waybill: string,
+    waybill: string[],
 ) {
     try {
         const response = await fetch(`${process.env.BASE_URL}/api/spares/postSpare`, {
@@ -20,11 +21,12 @@ export async function postSpareAction(
                 "x-api-key": process.env.THREEWB_API_KEY
             },
             body: JSON.stringify({
-                branch: branch,
-                part: part,
-                cost: cost,
-                msrp: msrp,
-                waybill: waybill,
+                branch,
+                part,
+                quantity,
+                cost,
+                msrp,
+                waybill,
             })
         })
         if (!response.ok) {

@@ -6,21 +6,13 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription, EmptyContent } from "@/components/ui/empty";
 import { Spare, useGetSpares } from "@/hooks/useGetSpares";
 import { columns } from "@/components/spare/columns";
-import { DataTable } from "@/components/motor/dataTable";
+import { DataTable } from "@/components/motors/dataTable";
 import { useEffect, useState } from "react";
 import { AddSpare } from "./addSpare";
 
 export function Wrapper() {
 
     const { spares, loading, error, getBackSpares } = useGetSpares()
-    const [inStockSpares, setInStockSpares] = useState<Spare[]>([])
-
-    useEffect(() => {   
-        if (spares) {
-            const filteredSpares = spares.filter((s) => s.status === "in stock")
-            setInStockSpares(filteredSpares)
-        }
-    }, [spares])
 
     return (
         <div className="flex flex-col h-full p-4 md:p-6 lg:p-8 w-full gap-6">
@@ -79,7 +71,7 @@ export function Wrapper() {
                                             <div className="flex justify-end">
                                                 <AddSpare getSpares={getBackSpares} />
                                             </div>
-                                            <DataTable columns={columns} data={inStockSpares} />
+                                            <DataTable columns={columns} data={spares} />
                                         </div>
                                     </>
                                 )

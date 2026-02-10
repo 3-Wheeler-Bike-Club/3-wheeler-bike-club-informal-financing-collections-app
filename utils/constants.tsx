@@ -180,7 +180,7 @@ export const SEARCH_FILTERS = [
     },
 ]
 
-export const PARTS = [
+export const PARTSSS = [
     {
         type: "",
         description: "2..75-17 41P 4PR ATT525 TUBELESS - 40114010",
@@ -303,3 +303,6 @@ export const PARTS = [
         cost: 26 
     },
 ]
+
+
+

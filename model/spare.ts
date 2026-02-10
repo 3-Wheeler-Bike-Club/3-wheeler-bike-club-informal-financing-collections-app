@@ -17,37 +17,20 @@ const SpareSchema = new mongoose.Schema(
             description: {
                 type: String,
             },
-            date: {
-                type: String,
-            },
-            batch: {
-                type: String,
-            },
-            d: {
-                type: String,
-            },
-            code: {
-                type: String,
-            },
-            t: {
-                type: String,
-            },
-            serial: {
-                type: String,
-            }, 
-        },              
+        },
+        // Quantity of this spare at the given branch
+        quantity: {
+            type: Number,
+        },
         cost: {
             type: Number,
         },
         msrp: {
             type: Number,
         },
+        // One or more uploaded waybill file URLs
         waybill: {
-            type: String,
-        },
-        status: {
-            type: String,
-            enum: ["in stock", "out of stock"],
+            type: [String],
         },
         createdAt: {
             type: Date,
@@ -61,8 +44,10 @@ const SpareSchema = new mongoose.Schema(
     {
         timestamps: true, // Add timestamps
     }
-
 )
+
+// Ensure each part number is unique per branch, so quantity is independent per branch
+SpareSchema.index({ "part.no": 1, branch: 1 }, { unique: true })
 
 const Spare = mongoose.models.Spare || mongoose.model("Spare", SpareSchema)
 
