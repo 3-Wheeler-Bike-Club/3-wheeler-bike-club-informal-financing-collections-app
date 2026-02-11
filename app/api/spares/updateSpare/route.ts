@@ -14,9 +14,11 @@ export async function POST(
 
     try {
         await connectDB()
-        const spare = await Spare.findByIdAndUpdate({ _id: _id }, {
-            status: "out of stock",
-        }, { new: true })
+        const spare = await Spare.findOneAndUpdate(
+            { _id, quantity: { $gte: 1 } },
+            { $inc: { quantity: -1 } },
+            { new: true }
+        )
 
         if (!spare) {
             return new Response(
