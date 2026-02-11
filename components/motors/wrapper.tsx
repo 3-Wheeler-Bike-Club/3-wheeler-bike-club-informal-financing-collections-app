@@ -5,9 +5,9 @@ import { Menu } from "@/components/top/menu";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription, EmptyContent } from "@/components/ui/empty";
 import { Motor, useGetMotors } from "@/hooks/useGetMotors";
-import { AddMotor } from "@/components/motor/addMotor";
-import { columns } from "@/components/motor/columns";
-import { DataTable } from "@/components/motor/dataTable";
+import { AddMotor } from "@/components/motors/addMotor";
+import { columns } from "@/components/motors/columns";
+import { DataTable } from "@/components/motors/dataTable";
 import { useEffect, useState } from "react";
 
 export function Wrapper() {

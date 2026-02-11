@@ -5,20 +5,24 @@ export const BRANCHES = [
         value: "head-office-kasoa",
     },
     {
-        name: "Walantu Kasoa",
-        value: "walantu-kasoa",
+        name: "Walantu Main Kasoa ",
+        value: "walantu-main-kasoa",
+    },
+    {
+        name: "Walantu Annex Kasoa",
+        value: "walantu-annex-kasoa",
     },
     {
         name: "Escobar Kasoa",
         value: "escobar-kasoa",
     },
     {
-        name: "Budumburam Liberia Camp",
-        value: "budumburam-liberia-camp",
+        name: "Budumburam Liberia Camp Kasoa",
+        value: "budumburam-liberia-camp-kasoa",
     },
     {
-        name: "Dwenase Sefwi Wiawso",
-        value: "dwenase-sefwi-wiawso",
+        name: "Dwenase Sefwi Wiawso Kumasi",
+        value: "dwenase-sefwi-wiawso-kumasi",
     },
 ]
 

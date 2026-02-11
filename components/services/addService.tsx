@@ -48,7 +48,7 @@ import { formatNumberWithCommas } from "@/utils/helpers"
 const addServiceFormSchema = z.object({
   branch: z.string().min(1, "Branch is required"),
   partType: z.string().min(1, "Part type is required"),
-  partSerial: z.string().min(1, "Serial is required"),
+  selectedSpareId: z.string().min(1, "Select a part"),
   customerFirstName: z.string().min(1, "First name is required"),
   customerOtherName: z.string(),
   customerLastName: z.string().min(1, "Last name is required"),
@@ -65,15 +65,15 @@ export interface AddServiceProps {
 
 interface SpareForCombobox {
   description: string
-  serial: string
-  value: string
+  no: string
+  value: string // spare._id
 }
 
 export function AddService({ spares, getServices, getSpares }: AddServiceProps) {
 
   useEffect(() => {
     if (spares && spares.length > 0) {
-      const inStock = spares.filter((s) => s.status === "in stock")
+      const inStock = spares.filter((s) => (s.quantity ?? 0) > 0)
       setSparesInStock(inStock)
     } else {
       setSparesInStock([])
@@ -88,9 +88,9 @@ export function AddService({ spares, getServices, getSpares }: AddServiceProps) 
   useEffect(() => {
     if (sparesByPartType && sparesByPartType.length > 0) {
       const formatted = sparesByPartType.map((item) => ({
-        description: item.part.description ?? item.part.serial,
-        serial: item.part.serial,
-        value: item.part.serial,
+        description: item.part.description ?? item.part.no,
+        no: item.part.no,
+        value: item._id,
       }))
       setSparesForCombobox(formatted)
     } else {
@@ -106,7 +106,7 @@ export function AddService({ spares, getServices, getSpares }: AddServiceProps) 
     defaultValues: {
       branch: "",
       partType: "",
-      partSerial: "",
+      selectedSpareId: "",
       customerFirstName: "",
       customerOtherName: "",
       customerLastName: "",
@@ -120,15 +120,15 @@ export function AddService({ spares, getServices, getSpares }: AddServiceProps) 
     onSubmit: async ({ value }) => {
       setIsSubmitting(true)
       try {
-        const selectedSpare = sparesByPartType.find((s) => s.part.serial === value.partSerial)
+        const selectedSpare = sparesByPartType.find((s) => s._id === value.selectedSpareId)
         if (selectedSpare) {
           const result = await postServiceAction(
             value.branch,
             {
               type: selectedSpare.part.type,
-              model: selectedSpare.part.description ?? selectedSpare.part.serial,
+              model: selectedSpare.part.description ?? selectedSpare.part.no,
               no: selectedSpare.part.no,
-              serial: selectedSpare.part.serial,
+              serial: selectedSpare._id,
             },
             {
               firstname: value.customerFirstName,
@@ -308,13 +308,13 @@ export function AddService({ spares, getServices, getSpares }: AddServiceProps) 
                         }}
                       />
                       <addServiceForm.Field
-                        name="partSerial"
+                        name="selectedSpareId"
                         children={(field) => {
                           const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
                           return (
                             <Field data-invalid={isInvalid}>
                               <div className="flex flex-col gap-1 w-full max-w-sm space-x-2">
-                                <FieldLabel className="text-primary">Part (Serial)</FieldLabel>
+                                <FieldLabel className="text-primary">Part</FieldLabel>
                                 <Combobox
                                   items={sparesForCombobox}
                                   itemToStringValue={(item: SpareForCombobox) => item.value}
@@ -328,7 +328,7 @@ export function AddService({ spares, getServices, getSpares }: AddServiceProps) 
                                   }}
                                   disabled={isSubmitting}
                                 >
-                                  <ComboboxInput placeholder="Search parts by serial..." />
+                                  <ComboboxInput placeholder="Search parts by description or no..." />
                                   <ComboboxContent container={dialogContentRef}>
                                     <ComboboxEmpty>No parts found.</ComboboxEmpty>
                                     <ComboboxList>
@@ -337,7 +337,7 @@ export function AddService({ spares, getServices, getSpares }: AddServiceProps) 
                                           <Item size="sm" className="p-0">
                                             <ItemContent>
                                               <ItemTitle className="whitespace-nowrap">{item.description}</ItemTitle>
-                                              <ItemDescription>{item.serial}</ItemDescription>
+                                              <ItemDescription>{item.no}</ItemDescription>
                                             </ItemContent>
                                           </Item>
                                         </ComboboxItem>

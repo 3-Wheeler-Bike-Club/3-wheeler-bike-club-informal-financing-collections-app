@@ -1,4 +1,4 @@
-import { Wrapper } from "@/components/motor/wrapper";
+import { Wrapper } from "@/components/motors/wrapper";
 
 export default function Motor() {
     return (
