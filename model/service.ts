@@ -4,12 +4,19 @@ const ServiceSchema = new mongoose.Schema(
     {
         branch: {
             type: String,
-            enum: ["head-office-kasoa", "walantu-kasoa", "escobar-kasoa", "buduburam-liberia-camp", "dwenase-sefwi-wiawso"],
+            enum: [
+                "head-office",
+                "walantu-main",
+                "walantu-annex",
+                "escobar",
+                "buduburam-liberia-camp",
+                "dwenase-sefwi-wiawso",
+            ],
         },        
         part: {
             type: {
                 type: String,
-                enum: ["motorcycle", "scooter", "semi-auto", "tricycle"],
+                enum: ["motorcycle", "scooter", "semi-auto", "tricycle", "general"]
             },
             model: {
                 type: String,
@@ -36,13 +43,23 @@ const ServiceSchema = new mongoose.Schema(
                 type: String,
             },
         },
-        amount: {
-            type: Number,
-        },
-        status: {
-            type: String,
-            enum: ["paid in full", "paid in installments"],
-        },
+        payments: [
+            {
+                amount: {
+                    type: Number,
+                },
+                status: {
+                    type: String,
+                    enum: ["full", "partial"],
+                },
+                balance: {
+                    type: Number,
+                },
+                due: {
+                    type: Date,
+                },
+            }
+        ],
         createdAt: {
             type: Date,
             default: Date.now,
